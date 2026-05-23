@@ -407,6 +407,81 @@
       .appFullscreen .floatingFullscreenBtn{font-size:10px!important;min-width:46px!important;padding:0 8px!important;}
     }
 
+  
+
+/* ===== TELEGRAM MINI APP UX UPGRADE — FINAL ===== */
+html,body{max-width:100%;overflow-x:hidden!important;}
+.wrap{width:100%;overflow-x:hidden;}
+.card{min-height:86px;display:flex;flex-direction:column;justify-content:center;}
+.cards{align-items:stretch;}
+.panel{min-width:0;}
+.chartHead{gap:12px;}
+.chartHead>div:first-child{min-width:0;}
+.tabs{flex:0 0 auto;}
+.lang{position:sticky;top:8px;z-index:50;width:max-content;max-width:100%;padding:6px;border:1px solid rgba(96,165,250,.38);border-radius:999px;background:rgba(5,8,22,.86);box-shadow:0 10px 28px rgba(0,0,0,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+.lang button{min-width:42px;font-weight:900;white-space:nowrap;}
+.floatingFullscreenBtn{transform:scale(.88);transform-origin:right bottom;}
+.fullScreenBtn{max-width:360px;}
+.internalPromoPanel,.introPanel,.firstTradeGuide{scroll-margin-top:110px;}
+.scroll{max-width:100%;}
+table{min-width:560px;}
+
+.appFullscreen .wrap{padding-top:118px!important;padding-left:max(10px,env(safe-area-inset-left))!important;padding-right:max(10px,env(safe-area-inset-right))!important;overflow-x:hidden!important;}
+.appFullscreen .top{display:block!important;position:fixed!important;top:calc(env(safe-area-inset-top) + 58px)!important;left:10px!important;right:88px!important;z-index:1000000!important;pointer-events:none!important;margin:0!important;padding:0!important;background:transparent!important;}
+.appFullscreen .top .brand,.appFullscreen .top .badges{display:none!important;}
+.appFullscreen .top>div:last-child{pointer-events:auto!important;}
+.appFullscreen .top .lang{position:static!important;display:flex!important;flex-wrap:nowrap!important;gap:5px!important;max-width:100%!important;width:max-content!important;overflow-x:auto!important;align-items:center!important;margin:0!important;padding:6px!important;border-radius:999px!important;background:rgba(5,8,22,.94)!important;border:1px solid rgba(96,165,250,.48)!important;box-shadow:0 12px 28px rgba(0,0,0,.42)!important;}
+.appFullscreen .top .lang:before{content:'🌐';font-size:13px;line-height:1;margin:0 2px 0 3px;}
+.appFullscreen .top .lang button{min-width:38px!important;padding:8px 9px!important;border-radius:999px!important;font-size:13px!important;line-height:1!important;}
+.appFullscreen .floatingFullscreenBtn{position:fixed!important;top:calc(env(safe-area-inset-top) + 62px)!important;right:10px!important;bottom:auto!important;left:auto!important;z-index:1000001!important;min-width:56px!important;height:38px!important;line-height:38px!important;padding:0 10px!important;border-radius:999px!important;font-size:11px!important;letter-spacing:.2px!important;transform:none!important;box-shadow:0 10px 26px rgba(0,0,0,.42)!important;}
+.appFullscreen .grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;}
+.appFullscreen main,.appFullscreen aside{min-width:0!important;width:100%!important;}
+.appFullscreen .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin-bottom:10px!important;}
+.appFullscreen .card{min-height:62px!important;padding:10px!important;border-radius:16px!important;}
+.appFullscreen .card .v{font-size:17px!important;}
+.appFullscreen .card .k{font-size:11px!important;}
+.appFullscreen .trialPanel{grid-template-columns:1fr!important;margin-bottom:10px!important;padding:12px!important;border-radius:18px!important;}
+.appFullscreen .trialPanel h3{font-size:17px!important;margin-bottom:5px!important;}
+.appFullscreen .trialPanel p{font-size:13px!important;line-height:1.4!important;}
+.appFullscreen .trialTime{display:none!important;}
+.appFullscreen .accessFeatures{gap:6px!important;margin-top:8px!important;}
+.appFullscreen .accessFeature{font-size:11px!important;padding:5px 8px!important;}
+.appFullscreen .chartHead{align-items:flex-start!important;}
+.appFullscreen .chartHead .tabs{width:100%!important;justify-content:flex-start!important;margin-top:4px!important;}
+.appFullscreen .tf{padding:8px 10px!important;border-radius:12px!important;}
+.appFullscreen canvas{height:min(48vh,420px)!important;min-height:300px!important;width:100%!important;}
+.appFullscreen .panel{padding:12px!important;border-radius:18px!important;overflow:hidden!important;}
+.appFullscreen .side{gap:12px!important;}
+.appFullscreen table{min-width:520px!important;}
+.appFullscreen .scroll{overflow:auto!important;-webkit-overflow-scrolling:touch!important;}
+.appFullscreen .introPanel,.appFullscreen .firstTradeGuide,.appFullscreen .learn,.appFullscreen .candleGuide{display:block!important;}
+.appFullscreen .introTop,.appFullscreen .firstTradeGrid{grid-template-columns:1fr!important;}
+.appFullscreen .introCards,.appFullscreen .promoGrid,.appFullscreen .beginnerGrid{grid-template-columns:1fr!important;}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr!important;}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .chartHead{display:block;}
+  .chartHead .tabs{margin-top:10px;}
+  canvas{height:390px!important;}
+  table{min-width:520px;}
+}
+@media(max-width:560px){
+  .wrap{padding:10px!important;}
+  .cards,.appFullscreen .cards{grid-template-columns:1fr!important;}
+  .trialPanel{grid-template-columns:1fr!important;}
+  .trialTime{text-align:left!important;font-size:24px!important;}
+  .lang{gap:4px;padding:5px;}
+  .lang button{min-width:36px;padding:8px 9px;font-size:12px;}
+  .floatingFullscreenBtn{right:8px;bottom:8px;transform:scale(.82);}
+  .appFullscreen .wrap{padding-top:112px!important;}
+  .appFullscreen .top{top:calc(env(safe-area-inset-top) + 54px)!important;left:8px!important;right:72px!important;}
+  .appFullscreen .top .lang button{min-width:34px!important;padding:7px 8px!important;font-size:12px!important;}
+  .appFullscreen .floatingFullscreenBtn{top:calc(env(safe-area-inset-top) + 57px)!important;right:8px!important;min-width:48px!important;height:34px!important;line-height:34px!important;padding:0 8px!important;font-size:10px!important;}
+  .appFullscreen canvas{height:310px!important;min-height:280px!important;}
+  .appFullscreen .panel h2{font-size:16px!important;}
+}
+
   </style>
 </head>
 <body>
