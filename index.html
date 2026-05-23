@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Ancient Forex AI — Real Training Terminal</title>
+  <style>
+    :root{--bg:#050816;--panel:#101827e8;--panel2:#16223a;--border:#2e3b5f;--text:#edf2ff;--muted:#9aa8c7;--green:#22c55e;--red:#ef4444;--gold:#fbbf24;--blue:#38bdf8;--violet:#a78bfa;--shadow:0 24px 70px rgba(0,0,0,.46);--radius:22px}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 18% 8%,rgba(56,189,248,.18),transparent 30%),radial-gradient(circle at 82% 16%,rgba(251,191,36,.14),transparent 30%),radial-gradient(circle at 50% 100%,rgba(167,139,250,.12),transparent 35%),linear-gradient(135deg,#040713,#0a1020 48%,#050713);color:var(--text);min-height:100vh}
+    .wrap{max-width:1540px;margin:0 auto;padding:22px}.top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:18px}.brand h1{margin:0;font-size:31px}.brand p{margin:7px 0 0;color:var(--muted);line-height:1.45}.badges,.lang{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border);background:rgba(17,24,39,.74);padding:9px 13px;border-radius:999px;color:#cbd5e1;font-size:13px}.lang{margin-top:10px}.lang button{background:#0b1223;color:#cbd5e1;border:1px solid var(--border);border-radius:999px;padding:9px 12px;cursor:pointer}.lang button.active{background:linear-gradient(135deg,#1d4ed8,#0ea5e9);color:white;border-color:#60a5fa}
+    .grid{display:grid;grid-template-columns:1.45fr .95fr;gap:18px}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:14px}.card,.panel{background:linear-gradient(180deg,rgba(17,24,39,.9),rgba(8,13,28,.92));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}.card{padding:14px}.card .k{font-size:12px;color:var(--muted)}.card .v{font-weight:850;font-size:20px;margin-top:6px}.green{color:var(--green)}.red{color:var(--red)}.gold{color:var(--gold)}.blue{color:var(--blue)}.violet{color:var(--violet)}
+    .panel{padding:16px}.panel h2{font-size:18px;margin:0 0 12px}.chartHead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}.pill{display:inline-block;border:1px solid #334155;border-radius:999px;padding:4px 8px;color:#cbd5e1;background:#0b1223;margin:3px} select,input,button{font:inherit} select,input{background:#0b1223;color:var(--text);border:1px solid var(--border);border-radius:14px;padding:11px 12px;outline:none} input{width:100%}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tf,.miniBtn{background:#0b1223;color:#cbd5e1;border:1px solid var(--border);border-radius:12px;padding:9px 12px;cursor:pointer}.tf.active{background:linear-gradient(135deg,#1d4ed8,#0ea5e9);color:white;border-color:#60a5fa} canvas{width:100%;height:535px;background:linear-gradient(180deg,#09101f,#050814);border-radius:18px;border:1px solid #1e293b;display:block}.side{display:grid;gap:14px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.label{font-size:12px;color:var(--muted);margin:0 0 6px}.buy,.sell,.close,.danger{border:0;border-radius:16px;padding:14px;cursor:pointer;font-weight:900;letter-spacing:.5px;color:white}.buy{background:linear-gradient(135deg,#15803d,#22c55e)}.sell{background:linear-gradient(135deg,#b91c1c,#ef4444)}.close{background:linear-gradient(135deg,#92400e,#f59e0b)}.danger{background:linear-gradient(135deg,#7f1d1d,#ef4444)}button:disabled{opacity:.45;cursor:not-allowed}
+    .analysis{line-height:1.58;color:#dbeafe;background:#091326;border:1px solid #24324e;border-radius:16px;padding:13px}.notice{border:1px solid #3b4b70;background:#0b1223;border-radius:18px;padding:14px;color:#dbeafe;line-height:1.55}.orderBox{margin-top:12px;background:linear-gradient(180deg,#0b1428,#071122);border:1px solid #345071;border-radius:18px;padding:13px}.clearTradeMain{font-size:22px;font-weight:950;line-height:1.35;margin-bottom:10px}.clearTradeSub{color:#dbeafe;line-height:1.5;margin-bottom:10px}.clearGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.clearCell{background:#091326;border:1px solid #2d4569;border-radius:14px;padding:10px}.clearCell small{display:block;color:#9aa8c7;margin-bottom:5px}.clearCell b{font-size:16px;color:#e0f2fe}.stepNote{margin-top:10px;padding:10px;border-radius:14px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.32);color:#fde68a;line-height:1.45}
+    table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;border-bottom:1px solid #24324e;padding:9px 7px;color:#dbeafe}th{color:#93c5fd;font-weight:700}.scroll{max-height:310px;overflow:auto}.tiny{font-size:12px;color:#9aa8c7}.timer{display:inline-block;border:1px solid #36527a;background:#0b1223;border-radius:999px;padding:4px 9px;color:#dbeafe}.positionAction{border:1px solid #36527a;background:#0b1223;color:#dbeafe;border-radius:10px;padding:6px 9px;cursor:pointer}.positionAction:hover{border-color:#fbbf24}.learn{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.term{background:#091326;border:1px solid #24324e;border-radius:16px;padding:13px}.term b{color:#93c5fd}.term p{margin:7px 0 0;color:#cbd5e1;font-size:13px;line-height:1.52}.helpGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.candleGuide{margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.candleCard{background:#091326;border:1px solid #24324e;border-radius:16px;padding:13px;line-height:1.5}.candleCard b{display:block;margin-bottom:6px}.candleSample{height:76px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}.candle{position:relative;width:28px;border-radius:6px}.candle:before{content:'';position:absolute;left:50%;transform:translateX(-50%);width:3px;background:currentColor;border-radius:9px}.candle.greenC{height:46px;background:linear-gradient(180deg,#86efac,#16a34a);color:#86efac}.candle.greenC:before{height:70px;top:-12px}.candle.redC{height:46px;background:linear-gradient(180deg,#fecaca,#dc2626);color:#fecaca}.candle.redC:before{height:70px;top:-12px}.candle.dojiC{height:7px;background:#fbbf24;color:#fbbf24}.candle.dojiC:before{height:70px;top:-31px}.candle.longWickC{height:24px;background:#38bdf8;color:#38bdf8}.candle.longWickC:before{height:76px;top:-26px}.footer{margin-top:14px;color:#94a3b8;font-size:12px;text-align:center}.modeToggle{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modeBtn{background:#0b1223;color:#cbd5e1;border:1px solid var(--border);border-radius:14px;padding:11px 12px;cursor:pointer;font-weight:800}.modeBtn.active{background:linear-gradient(135deg,#1d4ed8,#0ea5e9);border-color:#60a5fa;color:#fff}.riskLow{color:#bbf7d0}.riskMedium{color:#fde68a}.riskHigh{color:#fecaca}.riskDanger{color:#fff;background:#7f1d1d;border-radius:8px;padding:2px 6px}.spreadBox{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.spreadCell{background:#091326;border:1px solid #2d4569;border-radius:14px;padding:10px}.spreadCell small{display:block;color:#9aa8c7;margin-bottom:5px}.spreadCell b{font-size:17px;color:#e0f2fe}.riskAlert{margin-top:10px;padding:12px;border-radius:14px;border:1px solid rgba(239,68,68,.45);background:rgba(239,68,68,.11);color:#fecaca;line-height:1.45;font-weight:700}
+    .trialPanel{margin:0 0 14px;padding:16px;border-radius:24px;border:1px solid rgba(251,191,36,.48);background:linear-gradient(135deg,rgba(251,191,36,.16),rgba(56,189,248,.09));box-shadow:var(--shadow);display:grid;grid-template-columns:1.25fr .75fr;gap:14px;align-items:center}.trialPanel h3{margin:0 0 7px;font-size:20px}.trialPanel p{margin:0;color:#dbeafe;line-height:1.45}.trialTime{font-size:31px;font-weight:950;color:#fbbf24;text-align:right}.accessStatus{display:inline-flex;align-items:center;gap:8px;margin-bottom:8px;padding:7px 11px;border-radius:999px;border:1px solid rgba(34,197,94,.44);background:rgba(34,197,94,.12);color:#bbf7d0;font-weight:900}.accessStatus.locked{border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.12);color:#fde68a}.accessFeatures{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.accessFeature{border:1px solid #36527a;background:#091326;color:#dbeafe;border-radius:999px;padding:6px 10px;font-size:12px}.telegramBtn,[id="telegramBtn"],button[data-telegram],a[data-telegram]{display:none!important;visibility:hidden!important;width:0!important;height:0!important;overflow:hidden!important}.fullScreenBtn{margin-top:9px;width:100%;border:1px solid rgba(251,191,36,.55);border-radius:16px;padding:13px;cursor:pointer;font-weight:950;color:#fff;background:linear-gradient(135deg,#7c3aed,#f59e0b);box-shadow:0 12px 28px rgba(251,191,36,.18)}.appFullscreen{background:#050816;overflow:hidden;height:100vh;height:100dvh}.appFullscreen .wrap{max-width:none;width:100%;height:var(--tg-viewport-height,100vh);min-height:var(--tg-viewport-height,100vh);padding:10px;overflow:auto}.appFullscreen .top,.appFullscreen .footer{display:none}.appFullscreen .trialPanel{margin-bottom:10px}.appFullscreen .grid{grid-template-columns:minmax(0,1.6fr) minmax(360px,.8fr);gap:10px}.appFullscreen canvas{height:calc(var(--tg-viewport-height,100vh) - 310px);min-height:420px}.appFullscreen .panel{border-radius:16px}.appFullscreen .introPanel,.appFullscreen .firstTradeGuide,.appFullscreen .learn,.appFullscreen .candleGuide{display:none}.appFullscreen .cards{margin-bottom:10px}.tgMiniApp .fullScreenBtn{display:block!important}.payBox{display:none;margin-top:12px;padding:13px;border-radius:18px;background:#091326;border:1px solid #36527a}.payBox.show{display:block}.payGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.payBtn{border:0;border-radius:16px;padding:15px 12px;cursor:pointer;font-weight:950;color:white;background:linear-gradient(135deg,#7c3aed,#38bdf8);box-shadow:0 12px 30px rgba(124,58,237,.24)}.codeRow{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.accessLocked{opacity:.45;pointer-events:none}
+
+    .introPanel{margin-top:14px;position:relative;overflow:hidden;border:1px solid rgba(251,191,36,.42);background:radial-gradient(circle at 15% 10%,rgba(251,191,36,.16),transparent 28%),radial-gradient(circle at 88% 22%,rgba(56,189,248,.16),transparent 30%),linear-gradient(180deg,rgba(17,24,39,.94),rgba(7,14,31,.96));}
+    .introPanel:before{content:'';position:absolute;inset:-2px;background:linear-gradient(120deg,transparent,rgba(251,191,36,.08),transparent);pointer-events:none}.introTop{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:start}.introKicker{display:inline-flex;align-items:center;gap:8px;color:#fde68a;border:1px solid rgba(251,191,36,.32);background:rgba(251,191,36,.1);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;margin-bottom:10px}.introTitle{font-size:24px;font-weight:950;color:#fbbf24;margin:0 0 10px;line-height:1.18}.introText{color:#dbeafe;line-height:1.62;margin:0}.introText b{color:#fff}.introList{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:7px}.introList li{color:#cbd5e1;line-height:1.45}.introList li:before{content:'✓';color:#22c55e;font-weight:900;margin-right:8px}.introCards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.introCard{background:rgba(9,19,38,.84);border:1px solid #2d4569;border-radius:16px;padding:13px;min-height:92px}.introCard .icon{font-size:22px;margin-bottom:7px}.introCard b{display:block;color:#93c5fd;margin-bottom:5px}.introCard span{display:block;color:#cbd5e1;font-size:13px;line-height:1.45}.introBottom{position:relative;margin-top:13px;border-radius:18px;padding:13px 14px;background:linear-gradient(135deg,rgba(34,197,94,.11),rgba(56,189,248,.1));border:1px solid rgba(56,189,248,.26);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.introMotto{font-weight:950;color:#e0f2fe;font-size:17px}.introDisclaimer{color:#9aa8c7;font-size:12px}
+    .tpModeToggle{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tpModeBtn{background:#0b1223;color:#cbd5e1;border:1px solid var(--border);border-radius:14px;padding:11px 12px;cursor:pointer;font-weight:850}.tpModeBtn.active{background:linear-gradient(135deg,#047857,#22c55e);border-color:#86efac;color:#fff}.tpHint{margin-top:8px;color:#cbd5e1;font-size:12px;line-height:1.45;background:#091326;border:1px solid #24324e;border-radius:14px;padding:10px}.firstTradeGuide{margin-top:14px;border-color:rgba(56,189,248,.36);background:radial-gradient(circle at 10% 0%,rgba(56,189,248,.13),transparent 28%),linear-gradient(180deg,rgba(17,24,39,.92),rgba(7,14,31,.96));}.firstTradeGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.firstStep{background:#091326;border:1px solid #2d4569;border-radius:16px;padding:12px;line-height:1.45}.firstStep b{color:#93c5fd}.firstWarning{margin-top:12px;padding:13px;border-radius:16px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.35);color:#fde68a;font-weight:800;line-height:1.45}.firstExample{margin-top:10px;color:#dbeafe;line-height:1.45}.firstExample b{color:#fff}.promoHero{border:1px solid rgba(251,191,36,.42);background:radial-gradient(circle at 10% 0%,rgba(251,191,36,.16),transparent 30%),radial-gradient(circle at 88% 12%,rgba(56,189,248,.15),transparent 32%),linear-gradient(180deg,rgba(17,24,39,.94),rgba(7,14,31,.97));padding:18px;border-radius:22px}.promoHero h2{margin:0 0 10px;color:#fbbf24;font-size:22px}.promoLead{line-height:1.65;color:#dbeafe}.promoFlow{margin:12px 0;padding:12px 14px;border-radius:16px;background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.30);font-weight:950;color:#d1fae5}.promoGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.promoItem{background:#091326;border:1px solid #2d4569;border-radius:16px;padding:12px;line-height:1.45}.promoItem b{display:block;color:#93c5fd;margin-bottom:6px}.promoItem span{color:#cbd5e1;font-size:13px}.accessLine{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}.accessLine span{border:1px solid #36527a;background:#091326;color:#dbeafe;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800}.beginnerGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.beginnerCard{background:#091326;border:1px solid #2d4569;border-radius:16px;padding:12px;line-height:1.45}.beginnerCard b{display:block;color:#93c5fd;margin-bottom:6px}.beginnerCard span{color:#cbd5e1}.beginnerWarning{margin-top:12px;padding:13px;border-radius:16px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.38);color:#fecaca;font-weight:850;line-height:1.45}@media(max-width:900px){.promoGrid,.beginnerGrid{grid-template-columns:1fr}}@media(max-width:700px){.firstTradeGrid{grid-template-columns:1fr}}
+    @media(max-width:1150px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(3,1fr)}canvas{height:430px}.learn{grid-template-columns:1fr 1fr}.helpGrid,.candleGuide{grid-template-columns:1fr}.introTop{grid-template-columns:1fr}.introCards{grid-template-columns:1fr 1fr}}@media(max-width:700px){.trialPanel{grid-template-columns:1fr}.trialTime{text-align:left}.wrap{padding:12px}.top{display:block}.badges,.lang{justify-content:flex-start}.cards,.learn{grid-template-columns:1fr}.controls,.row,.clearGrid,.candleGuide{grid-template-columns:1fr}.brand h1{font-size:24px}.introCards{grid-template-columns:1fr}.introTitle{font-size:21px}.introMotto{font-size:15px}}
+  
+    
+    .floatingFullscreenBtn{
+      position:fixed;
+      right:14px;
+      bottom:14px;
+      z-index:999900;
+      border:1px solid rgba(251,191,36,.65);
+      border-radius:999px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-weight:950;
+      color:#fff;
+      background:linear-gradient(135deg,#7c3aed,#f59e0b);
+      box-shadow:0 14px 32px rgba(0,0,0,.45);
+      display:block!important;
+    }
+    .hiddenTelegramOpen{display:none!important;visibility:hidden!important}
+
+    /* FULLSCREEN FIX — языки слева, выход из полного экрана справа, без перекрытия */
+    .appFullscreen .wrap{
+      padding-top:130px!important;
+    }
+    .appFullscreen .top{
+      display:block!important;
+      position:fixed!important;
+      top:max(74px,env(safe-area-inset-top))!important;
+      left:12px!important;
+      right:auto!important;
+      z-index:1000001!important;
+      margin:0!important;
+      padding:0!important;
+      background:transparent!important;
+      pointer-events:none!important;
+    }
+    .appFullscreen .top .brand,
+    .appFullscreen .top .badges{
+      display:none!important;
+    }
+    .appFullscreen .top > div:last-child{
+      pointer-events:auto!important;
+    }
+    .appFullscreen .top .lang{
+      pointer-events:auto!important;
+      position:fixed!important;
+      top:max(74px,env(safe-area-inset-top))!important;
+      left:12px!important;
+      right:auto!important;
+      display:flex!important;
+      flex-wrap:nowrap!important;
+      gap:8px!important;
+      justify-content:flex-start!important;
+      align-items:center!important;
+      z-index:1000002!important;
+      margin:0!important;
+      padding:8px!important;
+      border:1px solid rgba(96,165,250,.45)!important;
+      border-radius:999px!important;
+      background:rgba(5,8,22,.96)!important;
+      box-shadow:0 12px 34px rgba(0,0,0,.45)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+    .appFullscreen .top .lang:before{
+      content:'🌐';
+      font-size:14px;
+      line-height:1;
+      margin:0 2px 0 3px;
+    }
+    .appFullscreen .top .lang button{
+      min-width:42px!important;
+      padding:8px 10px!important;
+      border-radius:999px!important;
+      font-weight:950!important;
+      line-height:1!important;
+      white-space:nowrap!important;
+    }
+    .appFullscreen .floatingFullscreenBtn{
+      top:max(74px,env(safe-area-inset-top))!important;
+      right:12px!important;
+      bottom:auto!important;
+      left:auto!important;
+      z-index:1000000!important;
+      padding:11px 14px!important;
+      max-width:44vw!important;
+      white-space:nowrap!important;
+    }
+    .appFullscreen .fullScreenBtn{
+      display:none!important;
+    }
+    @media(max-width:700px){
+      .appFullscreen .wrap{
+        padding-top:150px!important;
+      }
+      .appFullscreen .top{
+        top:max(70px,env(safe-area-inset-top))!important;
+        left:8px!important;
+      }
+      .appFullscreen .top .lang{
+        top:max(70px,env(safe-area-inset-top))!important;
+        left:8px!important;
+        right:auto!important;
+        padding:6px!important;
+        gap:4px!important;
+      }
+      .appFullscreen .top .lang button{
+        min-width:38px!important;
+        padding:8px 9px!important;
+        font-size:13px!important;
+      }
+      .appFullscreen .floatingFullscreenBtn{
+        top:max(70px,env(safe-area-inset-top))!important;
+        right:8px!important;
+        padding:10px 12px!important;
+        font-size:12px!important;
+        max-width:42vw!important;
+      }
+    }
+
+
+    /* TELEGRAM MINI APP FINAL FIX — compact exit, stable viewport, no overlap */
+    .appFullscreen .floatingFullscreenBtn{
+      position:fixed!important;
+      top:calc(env(safe-area-inset-top) + 66px)!important;
+      right:10px!important;
+      bottom:auto!important;
+      left:auto!important;
+      z-index:2147483647!important;
+      min-width:54px!important;
+      height:42px!important;
+      padding:0 12px!important;
+      border-radius:999px!important;
+      font-size:12px!important;
+      line-height:42px!important;
+      text-align:center!important;
+      white-space:nowrap!important;
+      pointer-events:auto!important;
+    }
+    .appFullscreen .top .lang{
+      max-width:calc(100vw - 96px)!important;
+      overflow:hidden!important;
+    }
+    .appFullscreen .top .lang button{
+      flex:0 0 auto!important;
+    }
+    .appFullscreen .wrap{
+      padding-top:128px!important;
+      padding-left:max(10px,env(safe-area-inset-left))!important;
+      padding-right:max(10px,env(safe-area-inset-right))!important;
+      padding-bottom:max(14px,env(safe-area-inset-bottom))!important;
+    }
+    @media(max-width:700px){
+      .appFullscreen .floatingFullscreenBtn{
+        top:calc(env(safe-area-inset-top) + 62px)!important;
+        right:8px!important;
+        min-width:48px!important;
+        height:38px!important;
+        line-height:38px!important;
+        padding:0 10px!important;
+        font-size:11px!important;
+      }
+      .appFullscreen .wrap{padding-top:144px!important;}
+      .appFullscreen .top .lang{max-width:calc(100vw - 84px)!important;}
+    }
+
+
+
+    /* =========================================================
+       FINAL MOBILE / TELEGRAM OVERLAP FIX
+       Исправляет уменьшенное окно Telegram Mini App:
+       - одна колонка вместо двух;
+       - верхние кнопки не перекрывают контент;
+       - таблицы и панели не вылезают за экран;
+       - график адаптируется по ширине.
+    ========================================================= */
+    html,body{
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden!important;
+    }
+    .wrap,.grid,main,aside,.panel,.card,.trialPanel{
+      min-width:0!important;
+      max-width:100%!important;
+    }
+    .panel,.card,.trialPanel,.orderBox,.analysis,.notice{
+      overflow:hidden!important;
+    }
+    canvas{
+      max-width:100%!important;
+    }
+    table{
+      min-width:0!important;
+    }
+    .scroll{
+      width:100%!important;
+      max-width:100%!important;
+      overflow:auto!important;
+      -webkit-overflow-scrolling:touch!important;
+    }
+
+    /* Telegram fullscreen / small window */
+    .appFullscreen{
+      width:100vw!important;
+      max-width:100vw!important;
+      overflow:hidden!important;
+    }
+    .appFullscreen .wrap{
+      width:100%!important;
+      max-width:100%!important;
+      height:100vh!important;
+      height:100dvh!important;
+      min-height:100vh!important;
+      min-height:100dvh!important;
+      padding-top:118px!important;
+      padding-left:max(8px,env(safe-area-inset-left))!important;
+      padding-right:max(8px,env(safe-area-inset-right))!important;
+      padding-bottom:max(12px,env(safe-area-inset-bottom))!important;
+      overflow-y:auto!important;
+      overflow-x:hidden!important;
+    }
+    .appFullscreen .grid{
+      display:grid!important;
+      grid-template-columns:1fr!important;
+      gap:12px!important;
+      width:100%!important;
+      max-width:100%!important;
+    }
+    .appFullscreen main,
+    .appFullscreen aside,
+    .appFullscreen .side{
+      width:100%!important;
+      max-width:100%!important;
+      min-width:0!important;
+      display:grid!important;
+      gap:12px!important;
+    }
+    .appFullscreen .cards{
+      grid-template-columns:repeat(2,minmax(0,1fr))!important;
+      gap:8px!important;
+    }
+    .appFullscreen .card{
+      padding:10px!important;
+    }
+    .appFullscreen .card .v{
+      font-size:16px!important;
+      word-break:break-word!important;
+    }
+    .appFullscreen .panel{
+      width:100%!important;
+      max-width:100%!important;
+      border-radius:16px!important;
+      padding:12px!important;
+    }
+    .appFullscreen canvas{
+      width:100%!important;
+      height:320px!important;
+      min-height:260px!important;
+      max-height:48vh!important;
+    }
+    .appFullscreen .controls,
+    .appFullscreen .row,
+    .appFullscreen .clearGrid,
+    .appFullscreen .spreadBox,
+    .appFullscreen .payGrid,
+    .appFullscreen .codeRow{
+      grid-template-columns:1fr!important;
+    }
+    .appFullscreen .learn,
+    .appFullscreen .helpGrid,
+    .appFullscreen .candleGuide,
+    .appFullscreen .promoGrid,
+    .appFullscreen .beginnerGrid,
+    .appFullscreen .firstTradeGrid,
+    .appFullscreen .introCards{
+      grid-template-columns:1fr!important;
+    }
+
+    /* Верхняя панель: языки слева, выход справа */
+    .appFullscreen .top{
+      display:block!important;
+      position:fixed!important;
+      top:calc(env(safe-area-inset-top) + 62px)!important;
+      left:8px!important;
+      right:8px!important;
+      z-index:2147483600!important;
+      height:46px!important;
+      margin:0!important;
+      padding:0!important;
+      background:transparent!important;
+      pointer-events:none!important;
+    }
+    .appFullscreen .top .brand,
+    .appFullscreen .top .badges{
+      display:none!important;
+    }
+    .appFullscreen .top > div:last-child{
+      pointer-events:none!important;
+    }
+    .appFullscreen .top .lang{
+      pointer-events:auto!important;
+      position:fixed!important;
+      top:calc(env(safe-area-inset-top) + 62px)!important;
+      left:8px!important;
+      right:auto!important;
+      max-width:calc(100vw - 112px)!important;
+      height:46px!important;
+      display:flex!important;
+      flex-wrap:nowrap!important;
+      align-items:center!important;
+      justify-content:flex-start!important;
+      gap:4px!important;
+      overflow:hidden!important;
+      margin:0!important;
+      padding:6px!important;
+      border:1px solid rgba(96,165,250,.45)!important;
+      border-radius:999px!important;
+      background:rgba(5,8,22,.96)!important;
+      box-shadow:0 12px 34px rgba(0,0,0,.45)!important;
+      z-index:2147483601!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+    .appFullscreen .top .lang:before{
+      content:'🌐';
+      flex:0 0 auto!important;
+      font-size:13px!important;
+      margin:0 2px!important;
+    }
+    .appFullscreen .top .lang button{
+      flex:0 0 auto!important;
+      min-width:36px!important;
+      padding:8px 9px!important;
+      font-size:12px!important;
+      line-height:1!important;
+      font-weight:950!important;
+      white-space:nowrap!important;
+    }
+    .appFullscreen .floatingFullscreenBtn{
+      position:fixed!important;
+      top:calc(env(safe-area-inset-top) + 64px)!important;
+      right:8px!important;
+      bottom:auto!important;
+      left:auto!important;
+      width:auto!important;
+      min-width:54px!important;
+      height:42px!important;
+      max-width:92px!important;
+      padding:0 10px!important;
+      border-radius:999px!important;
+      font-size:11px!important;
+      line-height:42px!important;
+      text-align:center!important;
+      white-space:nowrap!important;
+      z-index:2147483602!important;
+      pointer-events:auto!important;
+    }
+    .appFullscreen .fullScreenBtn{
+      display:none!important;
+    }
+
+    /* Очень узкое окно Telegram Web */
+    @media(max-width:520px){
+      .wrap{padding:10px!important;}
+      .grid{grid-template-columns:1fr!important;gap:12px!important;}
+      main,aside,.side{width:100%!important;max-width:100%!important;min-width:0!important;}
+      .cards{grid-template-columns:1fr!important;}
+      .trialPanel{grid-template-columns:1fr!important;}
+      .trialTime{text-align:left!important;font-size:24px!important;}
+      .controls,.row,.clearGrid,.spreadBox,.payGrid,.codeRow{grid-template-columns:1fr!important;}
+      canvas{height:300px!important;}
+      .panel{padding:12px!important;border-radius:16px!important;}
+      .chartHead{display:block!important;}
+      .tabs{margin-top:10px!important;}
+      th,td{padding:7px 5px!important;font-size:12px!important;}
+      .appFullscreen .wrap{padding-top:118px!important;}
+      .appFullscreen .cards{grid-template-columns:1fr!important;}
+      .appFullscreen canvas{height:280px!important;}
+      .appFullscreen .top .lang{max-width:calc(100vw - 100px)!important;height:42px!important;top:calc(env(safe-area-inset-top) + 62px)!important;}
+      .appFullscreen .top .lang button{min-width:34px!important;padding:7px 8px!important;font-size:11px!important;}
+      .appFullscreen .floatingFullscreenBtn{height:38px!important;line-height:38px!important;min-width:50px!important;max-width:86px!important;top:calc(env(safe-area-inset-top) + 64px)!important;}
+    }
+
+    @media(max-width:380px){
+      .appFullscreen .top .lang:before{display:none!important;}
+      .appFullscreen .top .lang{max-width:calc(100vw - 92px)!important;}
+      .appFullscreen .top .lang button{min-width:31px!important;padding:7px 7px!important;}
+      .appFullscreen .floatingFullscreenBtn{font-size:10px!important;min-width:46px!important;padding:0 8px!important;}
+    }
+
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand"><h1 data-i18n="title">Ancient Forex AI — учебный терминал</h1><p data-i18n="subtitle">Учись торговать как в реальном терминале: несколько ордеров BUY/SELL, маржа, equity, риск, свечи и AI‑анализ.</p></div><div><div class="badges"><span class="badge" data-i18n="badge1">Учебный режим</span><span class="badge" data-i18n="badge2">Без реальных денег</span><span class="badge" data-i18n="badge3">Forex hedging</span></div><div class="lang"><button data-lang="ru" class="active">RU</button><button data-lang="en">EN</button><button data-lang="ka">KA</button></div></div></div>
+
+  <div class="trialPanel" id="trialPanel"><div><div class="accessStatus" id="accessStatus">🟡 Бесплатно 10 минут</div><h3 id="trialTitle">Игра бесплатно 10 минут</h3><p id="trialText">После пробного периода можно купить 30 минут за 100⭐ или 24 часа за 300⭐. Администратор может ввести код и получить постоянный доступ на этом устройстве.</p><div class="accessFeatures" id="accessFeatures"><span class="accessFeature">BUY / SELL</span><span class="accessFeature">AI‑анализ</span><span class="accessFeature">Без реальных денег</span><span class="accessFeature">История сделок</span></div><button class="fullScreenBtn" id="fullScreenBtn" type="button">⛶ ПОЛНЫЙ ЭКРАН</button><div class="payBox" id="payBox"><b id="payTitle">Бесплатные 10 минут закончились. Выберите:</b><div class="payGrid"><button class="payBtn" id="pay30">⭐ КУПИТЬ 30 МИН — 100 Stars</button><button class="payBtn" id="payDay">⭐ КУПИТЬ 24 ЧАСА — 300 Stars</button></div><div class="codeRow"><input id="accessCode" placeholder="Введите код доступа"><button class="miniBtn" id="applyCode">OK</button></div><div class="tiny" id="payHint">Для администратора: введите админ-код — он даст постоянный доступ на этом устройстве.</div></div></div><div class="trialTime" id="trialTimer">10:00</div></div>
+
+  <div class="cards">
+    <div class="card"><div class="k" data-i18n="balance">Balance / закрытые сделки</div><div class="v" id="balance">$50,000.00</div></div>
+    <div class="card"><div class="k" data-i18n="equity">Equity / баланс + PnL</div><div class="v blue" id="equity">$50,000.00</div></div>
+    <div class="card"><div class="k" data-i18n="available">Free Margin / доступно</div><div class="v blue" id="available">$50,000.00</div></div>
+    <div class="card"><div class="k" data-i18n="locked">Used Margin / в сделках</div><div class="v gold" id="locked">$0.00</div></div>
+    <div class="card"><div class="k" data-i18n="floating">Floating PnL</div><div class="v" id="floating">$0.00</div></div>
+    <div class="card"><div class="k" data-i18n="marginLevel">Margin Level</div><div class="v violet" id="marginLevel">∞</div></div>
+  </div>
+
+  <div class="grid">
+    <main>
+      <div class="panel"><div class="chartHead"><div><h2 data-i18n="chartTitle">Свечной график рынка</h2><span class="pill" id="marketName">EUR/USD</span><span class="pill" id="priceNow">1.08420</span><span class="pill" id="trendState">Тренд: нейтральный</span><span class="pill" id="openCount">0 ордеров</span></div><div class="tabs" id="tfTabs"></div></div><canvas id="chart" width="1000" height="535"></canvas><div class="notice" style="margin-top:12px" id="tfExplain"></div></div>
+      <div class="panel introPanel" id="forexIntro" aria-live="polite"></div>
+      <div class="panel internalPromoPanel" id="internalPromo" style="margin-top:14px"></div>
+      <div class="panel" style="margin-top:14px"><h2 data-i18n="statsTitle">Статистика сделок</h2><div class="cards" style="grid-template-columns:repeat(4,1fr);margin:0"><div class="card"><div class="k" data-i18n="trades">Сделки</div><div class="v" id="tradesN">0</div></div><div class="card"><div class="k" data-i18n="profit">Прибыль</div><div class="v green" id="profitN">$0.00</div></div><div class="card"><div class="k" data-i18n="loss">Убыток</div><div class="v red" id="lossN">$0.00</div></div><div class="card"><div class="k" data-i18n="net">Итог</div><div class="v" id="netN">$0.00</div></div></div></div>
+      <div class="panel firstTradeGuide" id="firstTradeGuide" aria-live="polite"></div>
+    </main>
+
+    <aside class="side">
+      <div class="panel"><h2 data-i18n="tradeConsole">Торговая панель</h2><div class="controls"><div class="full"><div class="label" data-i18n="asset">Актив</div><select id="asset" style="width:100%"><option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option><option>GOLD</option><option>BTC/USDT</option><option>NASDAQ</option></select></div><div><div class="label" data-i18n="amount">Маржа сделки, $</div><input id="amount" type="number" value="1000" min="10" step="10"></div><div><div class="label" data-i18n="lev">Кредитное плечо</div><select id="lev"><option value="1">1x</option><option value="5">5x</option><option value="10" selected>10x</option><option value="20">20x</option></select></div><div class="full"><div class="label" data-i18n="modeLabel">Режим</div><div class="modeToggle"><button class="modeBtn active" id="noviceBtn" type="button" data-i18n="noviceMode">Новичок</button><button class="modeBtn" id="proBtn" type="button" data-i18n="proMode">Профи</button></div></div><div><div class="label" data-i18n="tp">Take Profit, %</div><input id="tp" type="number" value="3.0" step="0.1"></div><div><div class="label" data-i18n="sl">Stop Loss, %</div><input id="sl" type="number" value="2.0" step="0.1"></div><div class="full"><div class="label" data-i18n="tpModeLabel">TP/SL режим</div><div class="tpModeToggle"><button class="tpModeBtn active" id="manualTpBtn" type="button" data-i18n="manualTpMode">☑️ Ручной</button><button class="tpModeBtn" id="aiTpBtn" type="button" data-i18n="aiTpMode">☑️ AI рекомендует</button></div><div class="tpHint" id="tpHint"></div></div><div class="row full"><button class="buy" id="buyBtn">BUY MARKET</button><button class="sell" id="sellBtn">SELL MARKET</button></div><button class="close full" id="closeAllBtn" data-i18n="closeAll">ЗАКРЫТЬ ВСЕ ПОЗИЦИИ</button></div><div class="analysis" style="margin-top:12px" id="volumeBox"></div><div class="orderBox" id="orderBox"></div><div class="orderBox" id="tradeExplainBox"></div><div class="orderBox" id="lastActionBox"></div></div>
+      <div class="panel"><h2 data-i18n="openPositions">Открытые позиции</h2><div class="scroll"><table><thead><tr><th>#</th><th data-i18n="type">Тип</th><th data-i18n="volume">Объём</th><th>Entry</th><th>Risk</th><th>PnL</th><th></th></tr></thead><tbody id="positionsBody"></tbody></table></div></div>
+      <div class="panel"><h2 data-i18n="aiTitle">AI-анализ сделки</h2><div class="analysis" id="aiBox"></div></div>
+      <div class="panel"><h2 data-i18n="journal">Журнал закрытых сделок</h2><div class="scroll"><table><thead><tr><th data-i18n="type">Тип</th><th data-i18n="asset2">Актив</th><th data-i18n="volume">Объём</th><th>PnL</th></tr></thead><tbody id="history"></tbody></table></div></div>
+    </aside>
+  </div>
+
+  <div class="panel" style="margin-top:18px"><h2 data-i18n="learningTitle">Обучение: реальная логика Forex</h2><div class="helpGrid"><div class="notice" id="howToUse"></div><div class="notice" id="tfLong"></div></div><div class="candleGuide" id="candleGuide"></div><div class="learn" id="terms" style="margin-top:12px"></div></div>
+  <div class="footer" data-i18n="footer">Учебный симулятор. Это не брокер, не казино, не инвестиционный совет и не торговля реальными деньгами.</div>
+</div>
+<button class="floatingFullscreenBtn" id="floatingFullScreenBtn" type="button">⛶ FULL</button>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+const $=id=>document.getElementById(id);const money=n=>'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});const uid=()=>Math.random().toString(36).slice(2,9);
+const I18N={
+ ru:{title:'Ancient Forex AI — учебный Forex-терминал',subtitle:'Учись торговать как в реальном терминале: несколько ордеров BUY/SELL, маржа, Equity, риск, свечи и AI‑анализ.',badge1:'Учебный режим',badge2:'Без реальных денег',badge3:'Forex hedging',balance:'Balance / закрытые сделки',equity:'Equity / баланс + PnL',available:'Free Margin / доступно',locked:'Used Margin / в сделках',floating:'Floating PnL',marginLevel:'Margin Level',chartTitle:'Свечной график рынка',statsTitle:'Статистика сделок',trades:'Сделки',profit:'Прибыль',loss:'Убыток',net:'Итог',tradeConsole:'Торговая панель',asset:'Актив',amount:'Маржа сделки, $',lev:'Кредитное плечо',modeLabel:'Режим обучения',noviceMode:'Новичок',proMode:'Профи',tp:'Take Profit, %',sl:'Stop Loss, %',tpModeLabel:'TP/SL режим',manualTpMode:'☑️ Ручной',aiTpMode:'☑️ AI рекомендует',closeAll:'ЗАКРЫТЬ ВСЕ ПОЗИЦИИ',openPositions:'Открытые позиции',aiTitle:'AI-анализ',journal:'История сделок',type:'Тип',asset2:'Актив',volume:'Объём',learningTitle:'Обучение: реальная логика Forex',footer:'Учебный симулятор. Это не брокер, не казино, не инвестиционный совет и не торговля реальными деньгами.',noPos:'Нет открытых позиций.',historyEmpty:'Пока нет закрытых сделок.',aiStart:'Нажми BUY MARKET или SELL MARKET — каждый клик откроет отдельный ордер, как в реальном Forex hedging-режиме. Balance меняется только после закрытия. Equity меняется постоянно.',trend:'Тренд',neutral:'нейтральный',up:'вверх',down:'вниз',orders:'ордеров',tfText:{'1m':'1m: быстрый учебный режим. Много шума, зато быстро видно результат.', '5m':'5m: меньше шума, удобнее искать короткие входы.', '15m':'15m: хороший баланс для новичка — виден тренд и откаты.', '1h':'1h: подходит для анализа направления рынка.', '4h':'4h: крупный тренд, меньше случайных сигналов.', '1D':'1D: общая картина рынка.'},how:'Как теперь работает как на Forex: BUY MARKET сразу открывает новую покупку. SELL MARKET сразу открывает новую продажу. Если нажать BUY три раза — будет три отдельных BUY-ордера. При открытии Balance не уменьшается; из Free Margin блокируется маржа. Equity = Balance + Floating PnL. При закрытии ордера маржа освобождается, а прибыль/убыток добавляется к Balance.',tfLong:'Важно: это hedging-логика, как у многих Forex-счетов. Противоположные позиции не объединяются автоматически. BUY и SELL могут существовать одновременно. Закрывать можно один ордер или все сразу.',candleGuide:[['green','Зелёная свеча','Цена закрылась выше цены открытия. Обычно показывает давление покупателей: рынок за этот период вырос. Чем длиннее тело зелёной свечи, тем сильнее импульс покупки.'],['red','Красная свеча','Цена закрылась ниже цены открытия. Обычно показывает давление продавцов: рынок за этот период упал. Чем длиннее тело красной свечи, тем сильнее импульс продажи.'],['doji','Маленькое тело / Doji','Цена открытия и закрытия почти равны. Это сигнал неопределённости: покупатели и продавцы борются, лучше не входить без подтверждения.'],['wick','Тени свечи','Верхняя и нижняя тени показывают, куда цена ходила внутри периода. Длинная тень часто означает отскок, ложный пробой или борьбу за уровень.']],terms:[['BUY MARKET','Мгновенная покупка по текущей цене. Каждый клик открывает новый отдельный BUY-ордер.'],['SELL MARKET','Мгновенная продажа/short по текущей цене. Каждый клик открывает новый отдельный SELL-ордер.'],['Balance','Капитал после закрытых сделок. Пока позиция открыта, Balance не меняется.'],['Equity','Реальное состояние счёта сейчас: Balance плюс/минус Floating PnL всех открытых позиций.'],['Free Margin','Свободные деньги для новых сделок. При открытии позиции уменьшается на маржу.'],['Used Margin','Сумма, заблокированная под все открытые позиции.'],['Margin Level','Equity / Used Margin × 100%. Чем ниже показатель, тем опаснее счёт.'],['Hedging','Режим, где можно иметь несколько BUY и SELL одновременно. Они не складываются автоматически.'],['Режим Новичок / Профи','Новичок ограничивает количество ордеров и раньше предупреждает о риске. Профи даёт больше свободы, но требует самостоятельного контроля маржи и риска.'],['Volume','Сколько актива куплено или продано: маржа × плечо ÷ цена.'],['Leverage','Плечо увеличивает номинал позиции. Оно усиливает и прибыль, и убыток.'],['TP / SL','Take Profit фиксирует прибыль, Stop Loss ограничивает убыток. Например TP 3.0% означает: если цена прошла примерно 3% в твою сторону, сделка закроется с прибылью. SL 2.0% означает: если цена прошла примерно 2% против тебя, сделка закроется с ограниченным убытком. В учебном режиме TP/SL включаются не сразу, чтобы позиция не закрывалась мгновенно.'],['Ручной TP/SL','Ты сам выбираешь проценты Take Profit и Stop Loss перед открытием сделки. Эти значения сохраняются в каждом отдельном ордере.'],['AI рекомендует TP/SL','Платформа подбирает учебные TP/SL по волатильности актива и таймфрейму: спокойный рынок — меньше проценты, быстрый рынок — шире коридор. Это подсказка для обучения, а не инвестиционный совет.'],['Свеча / Candle','Свеча показывает четыре цены: Open — открытие, High — максимум, Low — минимум, Close — закрытие. Это главный элемент чтения рынка.'],['Зелёная свеча','Зелёная свеча означает, что цена закрылась выше открытия. Это не гарантия будущего роста, но показывает, что в этом периоде покупатели были сильнее.'],['Красная свеча','Красная свеча означает, что цена закрылась ниже открытия. Это не гарантия дальнейшего падения, но показывает, что в этом периоде продавцы давили сильнее.'],['Тело свечи','Тело свечи — расстояние между Open и Close. Большое тело показывает сильное движение; маленькое тело показывает слабость или неопределённость.'],['Тень свечи','Тень показывает максимум и минимум периода. Длинная верхняя тень может означать, что цену сверху продавили вниз. Длинная нижняя тень может означать, что цену снизу выкупили.'],['Timeframe / Таймфрейм','Период одной свечи: 1m, 5m, 15m, 1h, 4h, 1D. Чем меньше таймфрейм, тем больше шума. Чем выше таймфрейм, тем надёжнее общий тренд.'],['Entry / Точка входа','Цена, по которой открыт ордер. Хороший Entry обычно делается после анализа тренда, уровня и риска, а не случайным нажатием кнопки.'],['Закрытие одного ордера','В таблице открытых позиций можно закрыть отдельный ордер. Это ближе к реальному Forex: ты можешь держать несколько сделок и управлять каждой отдельно.'],['Закрытие всех позиций','Кнопка закрытия всех позиций фиксирует результат по всем открытым ордерам сразу. Это удобно, когда рынок резко меняется или надо быстро выйти из риска.'],['Spread / Спред','Разница между Bid и Ask. BUY открывается по Ask и закрывается по Bid; SELL открывается по Bid и закрывается по Ask. Поэтому новый ордер может сразу показывать небольшой минус.'],['Trend / Тренд','Основное направление рынка. BUY логичнее искать в восходящем тренде, SELL — в нисходящем. Против тренда входить опаснее.'],['Risk','Не открывай слишком много ордеров подряд. Даже если Balance большой, Free Margin может закончиться.']]},
+ en:{title:'Ancient Forex AI — Training Forex Terminal',subtitle:'Learn like in a real terminal: multiple BUY/SELL orders, margin, Equity, risk, candles and AI analysis.',badge1:'Training only',badge2:'No real money',badge3:'Forex hedging',balance:'Balance / closed trades',equity:'Equity / balance + PnL',available:'Free Margin',locked:'Used Margin',floating:'Floating PnL',marginLevel:'Margin Level',chartTitle:'Market Candlestick Chart',statsTitle:'Trading Statistics',trades:'Trades',profit:'Profit',loss:'Loss',net:'Net',tradeConsole:'Trade Panel',asset:'Asset',amount:'Order margin, $',lev:'Leverage',modeLabel:'Training mode',noviceMode:'Beginner',proMode:'Pro',tp:'Take Profit, %',sl:'Stop Loss, %',tpModeLabel:'TP/SL mode',manualTpMode:'☑️ Manual',aiTpMode:'☑️ AI recommends',closeAll:'CLOSE ALL POSITIONS',openPositions:'Open Positions',aiTitle:'AI Analysis',journal:'Trade History',type:'Type',asset2:'Asset',volume:'Volume',learningTitle:'Learning: real Forex logic',footer:'Training simulator only. Not a broker, not gambling, not investment advice and not real-money trading.',noPos:'No open positions.',historyEmpty:'No closed trades yet.',aiStart:'Press BUY MARKET or SELL MARKET — every click opens a separate order like real Forex hedging. Balance changes only after closing. Equity changes live.',trend:'Trend',neutral:'neutral',up:'up',down:'down',orders:'orders',tfText:{'1m':'1m: fast training mode with more noise.', '5m':'5m: calmer and useful for short entries.', '15m':'15m: balanced mode for trend and pullbacks.', '1h':'1h: useful for market direction.', '4h':'4h: higher timeframe and fewer random signals.', '1D':'1D: broad market picture.'},how:'How it works now like Forex: BUY MARKET instantly opens a new buy. SELL MARKET instantly opens a new sell. If you press BUY three times, you will have three separate BUY orders. Balance does not decrease at opening; margin is blocked from Free Margin. Equity = Balance + Floating PnL. When an order closes, margin is released and profit/loss is added to Balance.',tfLong:'Important: this is hedging logic used by many Forex accounts. Opposite positions are not merged automatically. BUY and SELL can exist at the same time. You can close one order or all at once.',candleGuide:[['green','Green candle','Close price is above open price. It usually shows buyer pressure: the market rose during this period. A larger body means stronger buying momentum.'],['red','Red candle','Close price is below open price. It usually shows seller pressure: the market fell during this period. A larger body means stronger selling momentum.'],['doji','Small body / Doji','Open and close are almost equal. It shows uncertainty: buyers and sellers are fighting, so wait for confirmation.'],['wick','Candle wicks','Upper and lower wicks show where price moved inside the period. Long wicks can signal rejection, false breakout or a fight around a level.']],terms:[['BUY MARKET','Instant buy at current price. Every click opens a new separate BUY order.'],['SELL MARKET','Instant sell/short at current price. Every click opens a new separate SELL order.'],['Balance','Capital after closed trades. It does not change while positions are open.'],['Equity','Current account value: Balance plus/minus Floating PnL of all open positions.'],['Free Margin','Money available for new trades. It decreases when margin is locked.'],['Used Margin','Total margin locked for all open positions.'],['Margin Level','Equity / Used Margin × 100%. Lower means more danger.'],['Hedging','Mode allowing multiple BUY and SELL positions at once.'],['Beginner / Pro mode','Beginner mode limits orders and warns earlier. Pro mode allows more freedom but requires stronger risk control.'],['Volume','Asset amount bought/sold: margin × leverage ÷ price.'],['Leverage','Leverage increases position notional and amplifies both profit and loss.'],['TP / SL','Take Profit locks profit, Stop Loss limits loss. For example, TP 3.0% means the trade closes in profit if price moves about 3% in your direction. SL 2.0% means the trade closes with limited loss if price moves about 2% against you. In training, TP/SL activate after a delay.'],['Manual TP/SL','You choose Take Profit and Stop Loss percentages before opening a trade. These values are saved inside each separate order.'],['AI recommends TP/SL','The platform suggests training TP/SL values based on asset volatility and timeframe: calmer market — smaller percentages, faster market — wider range. This is a learning hint, not investment advice.'],['Candle','A candle shows four prices: Open, High, Low and Close. It is the main element of market reading.'],['Green candle','A green candle means close is above open. It does not guarantee future growth, but shows that buyers were stronger during this period.'],['Red candle','A red candle means close is below open. It does not guarantee further decline, but shows that sellers were stronger during this period.'],['Candle body','The body is the distance between Open and Close. A large body shows strong movement; a small body shows weakness or uncertainty.'],['Candle wick','Wicks show the high and low of the period. A long upper wick can show rejection from above. A long lower wick can show buying from below.'],['Timeframe','The period of one candle: 1m, 5m, 15m, 1h, 4h, 1D. Smaller timeframes have more noise; higher timeframes show the broader trend.'],['Entry','The order opening price. A good entry usually comes after checking trend, level and risk, not from a random button press.'],['Closing one order','You can close one order from the open positions table. This is closer to real Forex because every order can be managed separately.'],['Closing all positions','Close all positions fixes the result on all open orders at once. Useful when the market changes quickly or risk must be reduced.'],['Spread','The difference between Bid and Ask. BUY opens at Ask and closes at Bid; SELL opens at Bid and closes at Ask. A new order can start slightly negative.'],['Trend','The main market direction. BUY is more logical in an uptrend, SELL in a downtrend. Trading against the trend is riskier.'],['Risk','Do not open too many orders in a row. Free Margin can run out.']]},
+ ka:{title:'Ancient Forex AI — სასწავლო Forex ტერმინალი',subtitle:'ისწავლე რეალური ტერმინალის მსგავსად: მრავალი BUY/SELL ორდერი, მარჟა, Equity, რისკი, სანთლები და AI ანალიზი.',badge1:'სასწავლო რეჟიმი',badge2:'რეალური ფულის გარეშე',badge3:'Forex hedging',balance:'Balance / დახურული გარიგებები',equity:'Equity / ბალანსი + PnL',available:'Free Margin / ხელმისაწვდომი',locked:'Used Margin / დაბლოკილი',floating:'Floating PnL',marginLevel:'Margin Level',chartTitle:'ბაზრის სანთლების გრაფიკი',statsTitle:'სტატისტიკა',trades:'გარიგებები',profit:'მოგება',loss:'ზარალი',net:'ჯამი',tradeConsole:'სავაჭრო პანელი',asset:'აქტივი',amount:'ორდერის მარჟა, $',lev:'ლევერიჯი',modeLabel:'სასწავლო რეჟიმი',noviceMode:'დამწყები',proMode:'პროფი',tp:'Take Profit, %',sl:'Stop Loss, %',tpModeLabel:'TP/SL რეჟიმი',manualTpMode:'☑️ ხელით',aiTpMode:'☑️ AI რეკომენდაცია',closeAll:'ყველა პოზიციის დახურვა',openPositions:'ღია პოზიციები',aiTitle:'AI ანალიზი',journal:'გარიგებების ისტორია',type:'ტიპი',asset2:'აქტივი',volume:'მოცულობა',learningTitle:'სწავლება: რეალური Forex ლოგიკა',footer:'სასწავლო სიმულატორია. არ არის ბროკერი, აზარტული თამაში, საინვესტიციო რჩევა ან რეალური ფულით ვაჭრობა.',noPos:'ღია პოზიციები არ არის.',historyEmpty:'დახურული გარიგებები ჯერ არ არის.',aiStart:'დააჭირე BUY MARKET ან SELL MARKET — ყოველი დაჭერა ხსნის ცალკე ორდერს, როგორც Forex hedging რეჟიმში. Balance იცვლება მხოლოდ დახურვის შემდეგ. Equity იცვლება ცოცხლად.',trend:'ტრენდი',neutral:'ნეიტრალური',up:'ზემოთ',down:'ქვემოთ',orders:'ორდერი',tfText:{'1m':'1m: სწრაფი სასწავლო რეჟიმი.', '5m':'5m: შედარებით მშვიდი მოკლე შესვლებისთვის.', '15m':'15m: კარგი ბალანსი ტრენდისა და კორექციისთვის.', '1h':'1h: მიმართულების ანალიზისთვის.', '4h':'4h: დიდი ტაიმფრეიმი.', '1D':'1D: ბაზრის საერთო სურათი.'},how:'ახლა მუშაობს Forex-ის მსგავსად: BUY MARKET მაშინვე ხსნის ახალ ყიდვას. SELL MARKET მაშინვე ხსნის ახალ გაყიდვას. თუ BUY-ს სამჯერ დააჭერ — გექნება სამი ცალკე BUY ორდერი. გახსნისას Balance არ მცირდება; Free Margin-იდან იბლოკება მარჟა. Equity = Balance + Floating PnL. დახურვისას მარჟა თავისუფლდება და მოგება/ზარალი ემატება Balance-ს.',tfLong:'ეს არის hedging ლოგიკა. საწინააღმდეგო პოზიციები ავტომატურად არ ერთიანდება. BUY და SELL შეიძლება ერთდროულად არსებობდეს. შეგიძლია დახურო ერთი ორდერი ან ყველა ერთად.',candleGuide:[['green','მწვანე სანთელი','დახურვის ფასი გახსნის ფასზე მაღლაა. ჩვეულებრივ აჩვენებს მყიდველების ძალას: ამ პერიოდში ბაზარი გაიზარდა. გრძელი სხეული უფრო ძლიერ ყიდვის იმპულსს ნიშნავს.'],['red','წითელი სანთელი','დახურვის ფასი გახსნის ფასზე დაბლაა. ჩვეულებრივ აჩვენებს გამყიდველების ძალას: ამ პერიოდში ბაზარი დაეცა. გრძელი სხეული უფრო ძლიერ გაყიდვის იმპულსს ნიშნავს.'],['doji','პატარა სხეული / Doji','გახსნისა და დახურვის ფასები თითქმის ერთნაირია. ეს გაურკვევლობას აჩვენებს: მყიდველები და გამყიდველები იბრძვიან, ამიტომ საჭიროა დადასტურება.'],['wick','სანთლის ჩრდილები','ზედა და ქვედა ჩრდილი აჩვენებს სად მივიდა ფასი პერიოდის შიგნით. გრძელი ჩრდილი ხშირად ნიშნავს უკუცემას, ცრუ გარღვევას ან დონისთვის ბრძოლას.']],terms:[['BUY MARKET','მყისიერი ყიდვა მიმდინარე ფასზე. ყოველი დაჭერა ხსნის ახალ BUY ორდერს.'],['SELL MARKET','მყისიერი გაყიდვა/short მიმდინარე ფასზე. ყოველი დაჭერა ხსნის ახალ SELL ორდერს.'],['Balance','კაპიტალი დახურული გარიგებების შემდეგ. ღია პოზიციისას არ იცვლება.'],['Equity','ანგარიშის მიმდინარე მდგომარეობა: Balance +/− Floating PnL.'],['Free Margin','ახალი გარიგებისთვის ხელმისაწვდომი თანხა.'],['Used Margin','ყველა ღია პოზიციისთვის დაბლოკილი მარჟა.'],['Margin Level','Equity / Used Margin × 100%. რაც დაბალია, მით უფრო სარისკოა.'],['Hedging','რეჟიმი, სადაც რამდენიმე BUY და SELL ერთდროულად შეიძლება არსებობდეს.'],['დამწყები / პროფი რეჟიმი','დამწყები ზღუდავს ორდერებს და ადრე გაფრთხილებს. პროფი მეტ თავისუფლებას იძლევა, მაგრამ რისკის კონტროლს მოითხოვს.'],['Volume','აქტივის რაოდენობა: მარჟა × ლევერიჯი ÷ ფასი.'],['Leverage','ლევერიჯი ზრდის პოზიციის ნომინალს და აძლიერებს მოგებასაც და ზარალსაც.'],['TP / SL','Take Profit აფიქსირებს მოგებას, Stop Loss ზღუდავს ზარალს. მაგალითად, TP 3.0% ნიშნავს: თუ ფასი დაახლოებით 3%-ით წავიდა შენს სასარგებლოდ, გარიგება მოგებით დაიხურება. SL 2.0% ნიშნავს: თუ ფასი დაახლოებით 2%-ით წავიდა შენს საწინააღმდეგოდ, გარიგება შეზღუდული ზარალით დაიხურება.'],['ხელით TP/SL','Take Profit-ისა და Stop Loss-ის პროცენტებს გარიგების გახსნამდე თავად ირჩევ. ეს მნიშვნელობები თითოეულ ცალკე ორდერში ინახება.'],['AI რეკომენდაცია TP/SL','პლატფორმა სასწავლო TP/SL მნიშვნელობებს აქტივის ვოლატილობისა და ტაიმფრეიმის მიხედვით გირჩევს: მშვიდ ბაზარზე პროცენტები ნაკლებია, სწრაფ ბაზარზე — უფრო ფართო. ეს არის სასწავლო მინიშნება და არა საინვესტიციო რჩევა.'],['სანთელი / Candle','სანთელი აჩვენებს ოთხ ფასს: Open, High, Low და Close. ეს ბაზრის წაკითხვის მთავარი ელემენტია.'],['მწვანე სანთელი','მწვანე სანთელი ნიშნავს, რომ დახურვის ფასი გახსნის ფასზე მაღლაა. ეს მომავალ ზრდას არ უზრუნველყოფს, მაგრამ აჩვენებს, რომ ამ პერიოდში მყიდველები უფრო ძლიერები იყვნენ.'],['წითელი სანთელი','წითელი სანთელი ნიშნავს, რომ დახურვის ფასი გახსნის ფასზე დაბლაა. ეს მომავალ ვარდნას არ უზრუნველყოფს, მაგრამ აჩვენებს, რომ ამ პერიოდში გამყიდველები უფრო ძლიერები იყვნენ.'],['სანთლის სხეული','სხეული არის Open-სა და Close-ს შორის მანძილი. დიდი სხეული ძლიერ მოძრაობას აჩვენებს; პატარა სხეული — სისუსტეს ან გაურკვევლობას.'],['სანთლის ჩრდილი','ჩრდილი აჩვენებს პერიოდის მაქსიმუმს და მინიმუმს. გრძელი ზედა ჩრდილი შეიძლება ნიშნავდეს ზემოდან უარყოფას; გრძელი ქვედა ჩრდილი — ქვემოდან შესყიდვას.'],['Timeframe / ტაიმფრეიმი','ერთი სანთლის პერიოდი: 1m, 5m, 15m, 1h, 4h, 1D. პატარა ტაიმფრეიმზე მეტი ხმაურია, დიდი კი უკეთ აჩვენებს მთავარ ტრენდს.'],['Entry / შესვლის ფასი','ორდერის გახსნის ფასი. კარგი Entry ჩვეულებრივ ხდება ტრენდის, დონისა და რისკის შემოწმების შემდეგ და არა შემთხვევითი დაჭერით.'],['ერთი ორდერის დახურვა','ღია პოზიციების ცხრილიდან შესაძლებელია ერთი ორდერის დახურვა. ეს უფრო ჰგავს რეალურ Forex-ს, რადგან თითოეული ორდერი ცალკე იმართება.'],['ყველა პოზიციის დახურვა','ყველა პოზიციის დახურვა ერთდროულად აფიქსირებს შედეგს ყველა ღია ორდერზე. მოსახერხებელია, როცა ბაზარი სწრაფად იცვლება ან რისკის შემცირებაა საჭირო.'],['Spread / სპრედი','Bid-სა და Ask-ს შორის სხვაობა. BUY იხსნება Ask-ით და იხურება Bid-ით; SELL იხსნება Bid-ით და იხურება Ask-ით.'],['Trend / ტრენდი','ბაზრის მთავარი მიმართულება. BUY უფრო ლოგიკურია აღმავალ ტრენდში, SELL — დაღმავალში. ტრენდის წინააღმდეგ ვაჭრობა უფრო სარისკოა.'],['Risk','არ გახსნა ზედმეტად ბევრი ორდერი ზედიზედ; Free Margin შეიძლება ამოიწუროს.']]}
+};
+const assets={'EUR/USD':1.0842,'GBP/USD':1.2710,'USD/JPY':155.2,'GOLD':2385,'BTC/USDT':67500,'NASDAQ':18450};const tfFactor={'1m':1,'5m':1.55,'15m':2.1,'1h':3.2,'4h':5.2,'1D':8};
+const state={balance:50000,asset:'EUR/USD',tf:'1m',positions:[],history:[],candles:[],price:1.0842,lang:localStorage.getItem('afx_lang')||'ru',mode:'novice',maxNoviceOrders:5,maxProOrders:12,minOpenMs:12000,trialMs:10*60*1000,trialStart:Number(localStorage.getItem('afx_trial_start')||Date.now()),paidUntil:Math.max(Number(localStorage.getItem('afx_paid_until')||0),localStorage.getItem('afx_admin_access')==='yes'?Date.now()+100*365*24*60*60*1000:0),lastAction:null,tpSlMode:localStorage.getItem('afx_tpsl_mode')||'manual'};localStorage.setItem('afx_trial_start',state.trialStart);
+
+const FOREX_INTRO={
+ ru:{kicker:'🌍 Учебный центр платформы',title:'Что такое Forex и зачем тренироваться здесь',lead:'Forex — один из крупнейших финансовых рынков мира, где участники анализируют движение цен и принимают решения: покупать актив (BUY) или продавать (SELL). Но настоящий результат приходит не от удачи, а от понимания рынка, контроля риска и дисциплины.',list:['читать свечные графики и видеть настроение рынка','понимать тренды, уровни и точки входа','рассчитывать риск, маржу, плечо и объём позиции','контролировать Balance, Equity, PnL и эмоции'],platform:'Ancient Forex AI — это учебная платформа без реальных денег. Она помогает изучить принцип работы реальных терминалов, почувствовать механику BUY/SELL и понять, подходит ли тебе такой стиль работы перед переходом к реальным платформам.',cards:[['📈','Анализ рынка','Учись читать свечи, тренд и движение цены.'],['🧠','AI-обучение','Получай разбор своих действий и ошибок.'],['🛡️','Управление риском','Понимай маржу, плечо, Equity и Stop Loss.'],['🎯','Подготовка','Сначала тренируйся, потом принимай реальные решения.']],motto:'Сначала учись → потом тренируйся → потом принимай реальные решения',disclaimer:'Training only • No real money • Educational simulator • Not investment advice'},
+ en:{kicker:'🌍 Platform learning center',title:'What is Forex and why train here',lead:'Forex is one of the world’s largest financial markets, where participants analyze price movement and decide whether to buy an asset (BUY) or sell it (SELL). Real results do not come from luck, but from market understanding, risk control and discipline.',list:['read candlestick charts and market mood','understand trends, levels and entry points','calculate risk, margin, leverage and position size','control Balance, Equity, PnL and emotions'],platform:'Ancient Forex AI is a training platform with no real money. It helps you understand how real trading terminals work, practice BUY/SELL mechanics and decide whether this style of work is right for you before moving to real platforms.',cards:[['📈','Market analysis','Learn to read candles, trend and price movement.'],['🧠','AI training','Get feedback on your actions and mistakes.'],['🛡️','Risk control','Understand margin, leverage, Equity and Stop Loss.'],['🎯','Preparation','Practice first, then make real decisions.']],motto:'Learn → Practice → Decide',disclaimer:'Training only • No real money • Educational simulator • Not investment advice'},
+ ka:{kicker:'🌍 პლატფორმის სასწავლო ცენტრი',title:'რა არის Forex და რატომ ივარჯიშო აქ',lead:'Forex მსოფლიოში ერთ-ერთი ყველაზე დიდი ფინანსური ბაზარია, სადაც მონაწილეები აანალიზებენ ფასის მოძრაობას და იღებენ გადაწყვეტილებას: იყიდონ აქტივი (BUY) თუ გაყიდონ (SELL). რეალური შედეგი იღბალზე კი არა, ბაზრის გაგებაზე, რისკის კონტროლსა და დისციპლინაზეა დამოკიდებული.',list:['სანთლების გრაფიკისა და ბაზრის განწყობის წაკითხვა','ტრენდის, დონეებისა და შესვლის წერტილების გაგება','რისკის, მარჟის, ლევერიჯისა და პოზიციის მოცულობის გამოთვლა','Balance, Equity, PnL და ემოციების კონტროლი'],platform:'Ancient Forex AI არის სასწავლო პლატფორმა რეალური ფულის გარეშე. ის გეხმარება გაიგო რეალური ტერმინალების მუშაობის პრინციპი, ივარჯიშო BUY/SELL მექანიკაში და გადაწყვიტო, არის თუ არა ეს სტილი შენთვის შესაფერისი რეალურ პლატფორმებზე გადასვლამდე.',cards:[['📈','ბაზრის ანალიზი','ისწავლე სანთლების, ტრენდისა და ფასის მოძრაობის კითხვა.'],['🧠','AI სწავლება','მიიღე შენი მოქმედებებისა და შეცდომების ანალიზი.'],['🛡️','რისკის მართვა','გაიგე მარჟა, ლევერიჯი, Equity და Stop Loss.'],['🎯','მომზადება','ჯერ ივარჯიშე, შემდეგ მიიღე რეალური გადაწყვეტილებები.']],motto:'ისწავლე → ივარჯიშე → შემდეგ მიიღე გადაწყვეტილება',disclaimer:'Training only • No real money • Educational simulator • Not investment advice'}
+};
+function renderForexIntro(){const d=FOREX_INTRO[state.lang]||FOREX_INTRO.ru;const el=$('forexIntro');if(!el)return;el.innerHTML=`<div class="introTop"><div><div class="introKicker">${d.kicker}</div><h2 class="introTitle">${d.title}</h2><p class="introText">${d.lead}</p><ul class="introList">${d.list.map(x=>`<li>${x}</li>`).join('')}</ul><p class="introText" style="margin-top:12px"><b>Ancient Forex AI</b> — ${d.platform.replace('Ancient Forex AI is','').replace('Ancient Forex AI — это','').replace('Ancient Forex AI არის','')}</p></div><div class="introCards">${d.cards.map(([i,b,s])=>`<div class="introCard"><div class="icon">${i}</div><b>${b}</b><span>${s}</span></div>`).join('')}</div></div><div class="introBottom"><div class="introMotto">${d.motto}</div><div class="introDisclaimer">${d.disclaimer}</div></div>`}
+function renderInternalPromo(){
+  const el=$('internalPromo');if(!el)return;
+  const d={
+    ru:{title:'🚀 Что такое Forex и зачем тренироваться здесь',lead:'Forex — один из крупнейших финансовых рынков мира. Здесь участники анализируют движение цены и принимают решение: покупать актив (BUY) или продавать (SELL). В Ancient Forex AI ты тренируешься без реальных денег и учишься думать как трейдер: видеть свечи, понимать риск и контролировать результат.',flow:'Учись → тренируйся → принимай решения',items:[['🕯️ Свечи','Показывают Open, High, Low и Close. По ним видно настроение рынка: где покупатели сильнее, где продавцы давят цену вниз.'],['🟢 BUY / 🔴 SELL','BUY — ставка на рост цены. SELL — ставка на падение. Каждый клик открывает отдельный ордер, поэтому важно не нажимать случайно.'],['🛡️ Риск','Перед входом смотри маржу, плечо и размер позиции. Большой объём усиливает и прибыль, и убыток.'],['💰 Balance','Деньги после закрытых сделок. Пока позиция открыта, Balance не показывает текущий плавающий результат.'],['📊 Equity','Текущая картина счёта: Balance плюс/минус Floating PnL всех открытых сделок.'],['📈 PnL','Прибыль или убыток по позиции. Пока сделка открыта — результат плавающий; после закрытия он попадает в Balance.']],access:['🎁 10 минут бесплатно','⭐ 30 минут — 100 Stars','⭐ 24 часа — 300 Stars','👑 Админ-доступ отдельно'],btn:'🚀 Перейти к первой сделке'},
+    en:{title:'🚀 What is Forex and why train here',lead:'Forex is one of the world’s largest financial markets. Participants analyze price movement and decide whether to buy an asset (BUY) or sell it (SELL). In Ancient Forex AI you practice without real money and learn to think like a trader: read candles, understand risk and control results.',flow:'Learn → practice → make decisions',items:[['🕯️ Candles','Show Open, High, Low and Close. They help you see market mood and buyer/seller pressure.'],['🟢 BUY / 🔴 SELL','BUY expects price growth. SELL expects price decline. Every click opens a separate order.'],['🛡️ Risk','Before entry, check margin, leverage and position size. Larger size amplifies both profit and loss.'],['💰 Balance','Money after closed trades. While a position is open, Balance does not show floating result.'],['📊 Equity','Current account picture: Balance plus/minus Floating PnL of all open trades.'],['📈 PnL','Profit or loss. While a trade is open it is floating; after closing it is added to Balance.']],access:['🎁 10 minutes free','⭐ 30 minutes — 100 Stars','⭐ 24 hours — 300 Stars','👑 Admin access separately'],btn:'🚀 Go to first trade'},
+    ka:{title:'🚀 რა არის Forex და რატომ უნდა ივარჯიშო აქ',lead:'Forex მსოფლიოში ერთ-ერთი ყველაზე დიდი ფინანსური ბაზარია. მონაწილეები აანალიზებენ ფასის მოძრაობას და იღებენ გადაწყვეტილებას: იყიდონ აქტივი (BUY) თუ გაყიდონ (SELL). Ancient Forex AI-ში ვარჯიშობ რეალური ფულის გარეშე და სწავლობ, როგორ წაიკითხო სანთლები, გაიგო რისკი და აკონტროლო შედეგი.',flow:'ისწავლე → ივარჯიშე → მიიღე გადაწყვეტილება',items:[['🕯️ სანთლები','აჩვენებს Open, High, Low და Close ფასებს და ბაზრის განწყობას.'],['🟢 BUY / 🔴 SELL','BUY — ზრდის მოლოდინი. SELL — ვარდნის მოლოდინი. ყოველი დაჭერა ცალკე ორდერს ხსნის.'],['🛡️ რისკი','შესვლამდე შეამოწმე მარჟა, ლევერიჯი და პოზიციის ზომა.'],['💰 Balance','თანხა დახურული გარიგებების შემდეგ. ღია პოზიციის შედეგს პირდაპირ არ აჩვენებს.'],['📊 Equity','ანგარიშის მიმდინარე სურათი: Balance პლუს/მინუს Floating PnL.'],['📈 PnL','მოგება ან ზარალი. ღია პოზიციაზე შედეგი მცურავია, დახურვის შემდეგ Balance-ში გადადის.']],access:['🎁 10 წუთი უფასოდ','⭐ 30 წუთი — 100 Stars','⭐ 24 საათი — 300 Stars','👑 ადმინ-წვდომა ცალკე'],btn:'🚀 პირველ გარიგებაზე გადასვლა'}
+  }[state.lang]||{};
+  const data = Object.keys(d).length?d:{title:'Forex',lead:'',flow:'',items:[],access:[],btn:'Start'};
+  el.innerHTML=`<div class="promoHero"><h2>${data.title}</h2><div class="promoLead">${data.lead}</div><div class="promoFlow">${data.flow}</div><div class="promoGrid">${data.items.map(([b,s])=>`<div class="promoItem"><b>${b}</b><span>${s}</span></div>`).join('')}</div><div class="accessLine">${data.access.map(x=>`<span>${x}</span>`).join('')}</div><button class="buy" id="promoStartBtn" type="button" style="margin-top:12px;width:100%">${data.btn}</button></div>`;
+  const btn=$('promoStartBtn'); if(btn) btn.onclick=()=>{try{$('amount').focus({preventScroll:false});}catch(e){} $('tradeExplainBox')?.scrollIntoView({behavior:'smooth',block:'center'});};
+}
+function renderFirstTradeGuide(){
+  const el=$('firstTradeGuide');if(!el)return;
+  const all={
+    ru:{title:'🧭 Обучение новичка: первая сделка без хаоса',cards:[['Маржа','Это сумма, которую ты выделяешь под одну сделку. Например, маржа $1,000 не значит, что ты покупаешь только на $1,000 — размер позиции зависит от плеча.'],['Плечо','Плечо увеличивает торговый объём. Маржа $1,000 × плечо 10x = позиция примерно $10,000. Прибыль и убыток тоже становятся сильнее.'],['TP 3.0%','Take Profit 3.0% означает: если цена прошла примерно 3% в твою сторону, сделка автоматически закрывается с прибылью.'],['SL 2.0%','Stop Loss 2.0% означает: если цена прошла примерно 2% против тебя, сделка закрывается с ограниченным убытком.'],['Пример первой сделки','Поставь маржу $1,000, плечо 10x, TP 3.0%, SL 2.0%. Нажми BUY один раз. Потом смотри PnL, Equity и Free Margin, не открывая новые ордера без причины.'],['Почему нельзя жать BUY подряд','Каждый клик BUY открывает новый отдельный ордер. Три клика = три позиции, больше Used Margin и выше риск быстрого убытка. Сначала оцени результат первой сделки.']],warn:'⚠️ Правило новичка: один анализ → один вход → контроль риска → закрытие/ожидание. Не превращай тренировку в случайное нажимание кнопок.'},
+    en:{title:'🧭 Beginner training: first trade without chaos',cards:[['Margin','The amount allocated to one trade. $1,000 margin does not mean only a $1,000 trade — position size depends on leverage.'],['Leverage','Leverage increases trading volume. $1,000 margin × 10x leverage = about a $10,000 position. Profit and loss are amplified too.'],['TP 3.0%','Take Profit 3.0% means the trade closes in profit if price moves about 3% in your direction.'],['SL 2.0%','Stop Loss 2.0% means the trade closes with limited loss if price moves about 2% against you.'],['First trade example','Set margin $1,000, leverage 10x, TP 3.0%, SL 2.0%. Press BUY once. Then watch PnL, Equity and Free Margin without opening more orders randomly.'],['Why not press BUY repeatedly','Every BUY click opens a separate order. Three clicks = three positions, more Used Margin and higher risk. First evaluate the first trade.']],warn:'⚠️ Beginner rule: one analysis → one entry → risk control → close or wait. Do not turn training into random clicking.'},
+    ka:{title:'🧭 დამწყების სწავლება: პირველი გარიგება ქაოსის გარეშე',cards:[['მარჟა','თანხა, რომელსაც ერთ გარიგებას უთმობ. $1,000 მარჟა არ ნიშნავს მხოლოდ $1,000 პოზიციას — ზომა ლევერიჯზეა დამოკიდებული.'],['ლევერიჯი','ლევერიჯი ზრდის სავაჭრო მოცულობას. $1,000 × 10x = დაახლოებით $10,000 პოზიცია. მოგებაც და ზარალიც ძლიერდება.'],['TP 3.0%','Take Profit 3.0% ნიშნავს: თუ ფასი დაახლოებით 3%-ით წავიდა შენს სასარგებლოდ, გარიგება მოგებით დაიხურება.'],['SL 2.0%','Stop Loss 2.0% ნიშნავს: თუ ფასი დაახლოებით 2%-ით წავიდა შენს საწინააღმდეგოდ, გარიგება შეზღუდული ზარალით დაიხურება.'],['პირველი გარიგების მაგალითი','დააყენე მარჟა $1,000, ლევერიჯი 10x, TP 3.0%, SL 2.0%. დააჭირე BUY-ს ერთხელ და დააკვირდი PnL-ს, Equity-ს და Free Margin-ს.'],['რატომ არ უნდა დააჭირო BUY-ს ზედიზედ','ყოველი BUY ახალი ცალკე ორდერია. სამი დაჭერა = სამი პოზიცია, მეტი Used Margin და უფრო მაღალი რისკი. ჯერ პირველი გარიგება შეაფასე.']],warn:'⚠️ დამწყების წესი: ერთი ანალიზი → ერთი შესვლა → რისკის კონტროლი → დახურვა/მოლოდინი.'}
+  };
+  const d=all[state.lang]||all.ru;
+  el.innerHTML=`<h2>${d.title}</h2><div class="beginnerGrid">${d.cards.map(([b,s])=>`<div class="beginnerCard"><b>${b}</b><span>${s}</span></div>`).join('')}</div><div class="beginnerWarning">${d.warn}</div>`;
+}
+function t(k){return I18N[state.lang][k]||k}function rnd(a,b){return a+Math.random()*(b-a)}function precision(asset=state.asset){return ['EUR/USD','GBP/USD'].includes(asset)?5:asset==='USD/JPY'?3:2}function getSpread(){const base={'EUR/USD':0.00012,'GBP/USD':0.00016,'USD/JPY':0.018,'GOLD':0.42,'BTC/USDT':28,'NASDAQ':4.5};return base[state.asset]||0.00012}function getBid(){return state.price-getSpread()/2}function getAsk(){return state.price+getSpread()/2}function orderPrice(side){return side==='BUY'?getAsk():getBid()}function closePrice(p){return p.side==='BUY'?getBid():getAsk()}function getUsedMargin(){return state.positions.reduce((s,p)=>s+p.margin,0)}function pnlOf(p){const px=p.asset===state.asset?closePrice(p):p.lastPrice||p.entry;const diff=p.side==='BUY'?px-p.entry:p.entry-px;return diff*p.volume}function getFloating(){return state.positions.reduce((s,p)=>s+pnlOf(p),0)}function getEquity(){return state.balance+getFloating()}function getFreeMargin(){return getEquity()-getUsedMargin()}function canAutoClose(p){return Date.now()-p.openedAt>=state.minOpenMs}function riskPct(p){return p.margin/Math.max(1,state.balance)*100}function riskClass(r){return r<2?'riskLow':r<5?'riskMedium':r<10?'riskHigh':'riskDanger'}function riskLabel(r){return r<2?'LOW':r<5?'MEDIUM':r<10?'HIGH':'DANGER'}
+function genCandles(){state.candles=[];let p=assets[state.asset];const vol=tfFactor[state.tf];for(let i=0;i<95;i++){let drift=Math.sin(i/8)*0.0008*vol;if(['GOLD','BTC/USDT','NASDAQ','USD/JPY'].includes(state.asset))drift*=p/10;const open=p;const move=rnd(-0.004,0.004)*p*vol/2+drift;const close=Math.max(0.0001,open+move);const high=Math.max(open,close)+Math.abs(rnd(0,0.003)*p*vol);const low=Math.min(open,close)-Math.abs(rnd(0,0.003)*p*vol);state.candles.push({open,high,low,close});p=close}state.price=p;updateAll();draw()}
+function nextCandle(){const last=state.candles[state.candles.length-1].close,vol=tfFactor[state.tf],open=last,move=rnd(-0.0035,0.0035)*last*vol,close=Math.max(.0001,open+move),high=Math.max(open,close)+Math.abs(rnd(0,0.0025)*last*vol),low=Math.min(open,close)-Math.abs(rnd(0,0.0025)*last*vol);state.candles.push({open,high,low,close});if(state.candles.length>95)state.candles.shift();state.price=close;autoTpSl();updateAll();draw()}
+function draw(){const c=$('chart'),ctx=c.getContext('2d'),W=c.width,H=c.height;ctx.clearRect(0,0,W,H);ctx.fillStyle='#06101f';ctx.fillRect(0,0,W,H);const pad=54,data=state.candles,max=Math.max(...data.map(x=>x.high),...state.positions.map(p=>p.tp),...state.positions.map(p=>p.sl)),min=Math.min(...data.map(x=>x.low),...state.positions.map(p=>p.tp),...state.positions.map(p=>p.sl));const y=p=>H-pad-((p-min)/(max-min||1))*(H-pad*1.55);ctx.strokeStyle='#14243f';for(let i=0;i<8;i++){let yy=pad+i*(H-pad*1.55)/7;ctx.beginPath();ctx.moveTo(pad,yy);ctx.lineTo(W-pad,yy);ctx.stroke()}const cw=(W-pad*2)/data.length;data.forEach((d,i)=>{const x=pad+i*cw+cw/2,up=d.close>=d.open;const grad=ctx.createLinearGradient(x,Math.min(y(d.open),y(d.close)),x,Math.max(y(d.open),y(d.close)));grad.addColorStop(0,up?'#86efac':'#fecaca');grad.addColorStop(1,up?'#16a34a':'#dc2626');ctx.strokeStyle=up?'#86efac':'#fecaca';ctx.fillStyle=grad;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y(d.high));ctx.lineTo(x,y(d.low));ctx.stroke();const bodyY=Math.min(y(d.open),y(d.close)),bodyH=Math.max(4,Math.abs(y(d.open)-y(d.close)));ctx.shadowColor=up?'rgba(34,197,94,.35)':'rgba(239,68,68,.35)';ctx.shadowBlur=7;ctx.fillRect(x-cw*.34,bodyY,cw*.68,bodyH);ctx.shadowBlur=0});ctx.fillStyle='#94a3b8';ctx.font='12px Inter,Arial';for(let i=0;i<5;i++){let p=min+(max-min)*i/4;ctx.fillText(p.toFixed(precision()),8,y(p)+4)}state.positions.forEach((p,i)=>{drawLine(ctx,y(p.entry),`#${i+1} ${p.side} ${p.entry.toFixed(precision())}`,p.side==='BUY'?'#38bdf8':'#f59e0b');drawLine(ctx,y(p.tp),`#${i+1} TP`,'#22c55e');drawLine(ctx,y(p.sl),`#${i+1} SL`,'#ef4444')})}
+function drawLine(ctx,y,label,color){ctx.strokeStyle=color;ctx.setLineDash([6,6]);ctx.beginPath();ctx.moveTo(54,y);ctx.lineTo(946,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=color;ctx.fillText(label,800,y-6)}
+function trend(){let d=state.candles;if(d.length<55)return 'neutral';let a=d.slice(-18).reduce((s,x)=>s+x.close,0)/18,b=d.slice(-55).reduce((s,x)=>s+x.close,0)/55;return a>b*1.002?'up':a<b*.998?'down':'neutral'}function calcVolume(side='BUY'){let amount=+$('amount').value||0,lev=+$('lev').value,notional=amount*lev,entry=orderPrice(side),vol=notional/entry;return{amount,lev,notional,vol,entry}}
+
+function recommendTpSl(){
+  let base={tp:3.0,sl:2.0};
+  const tf=state.tf;
+  if(tf==='5m')base={tp:3.0,sl:2.0};
+  if(tf==='15m')base={tp:3.5,sl:2.2};
+  if(tf==='1h')base={tp:4.0,sl:2.5};
+  if(tf==='4h')base={tp:5.0,sl:3.0};
+  if(tf==='1D')base={tp:6.0,sl:4.0};
+  if(['GOLD','BTC/USDT','NASDAQ'].includes(state.asset)){base.tp+=0.5;base.sl+=0.3}
+  return {tp:Number(base.tp.toFixed(1)),sl:Number(base.sl.toFixed(1))};
+}
+function setTpSlMode(mode){
+  state.tpSlMode=mode;
+  localStorage.setItem('afx_tpsl_mode',mode);
+  $('manualTpBtn').classList.toggle('active',mode==='manual');
+  $('aiTpBtn').classList.toggle('active',mode==='ai');
+  if(mode==='ai')applyAiTpSl();
+  updateTpHint();
+  updateAll();
+}
+function applyAiTpSl(){const r=recommendTpSl();$('tp').value=r.tp.toFixed(1);$('sl').value=r.sl.toFixed(1)}
+function updateTpHint(){
+  if(!$('tpHint'))return;
+  if(state.tpSlMode==='ai'){
+    const r=recommendTpSl();
+    $('tpHint').innerHTML=state.lang==='ru'?`AI рекомендует для ${state.asset} / ${state.tf}: <b class="green">TP ${r.tp.toFixed(1)}%</b> и <b class="red">SL ${r.sl.toFixed(1)}%</b>. Эти значения можно менять вручную.`:state.lang==='en'?`AI recommends for ${state.asset} / ${state.tf}: <b class="green">TP ${r.tp.toFixed(1)}%</b> and <b class="red">SL ${r.sl.toFixed(1)}%</b>. You can still edit them manually.`:`AI რეკომენდაცია ${state.asset} / ${state.tf}: <b class="green">TP ${r.tp.toFixed(1)}%</b> და <b class="red">SL ${r.sl.toFixed(1)}%</b>. სურვილის შემთხვევაში ხელით შეცვლაც შეიძლება.`;
+  }else{
+    $('tpHint').innerHTML=state.lang==='ru'?`Ручной режим: ты сам ставишь проценты. Сейчас учебный стандарт: <b class="green">TP 3.0%</b> и <b class="red">SL 2.0%</b>.`:state.lang==='en'?`Manual mode: you set the percentages yourself. Current training standard: <b class="green">TP 3.0%</b> and <b class="red">SL 2.0%</b>.`:`ხელით რეჟიმი: პროცენტებს თავად აყენებ. სასწავლო სტანდარტი: <b class="green">TP 3.0%</b> და <b class="red">SL 2.0%</b>.`;
+  }
+}
+function updateVolume(){const buy=calcVolume('BUY'),sell=calcVolume('SELL'),sp=getSpread();$('volumeBox').innerHTML=state.lang==='ru'?`<b>Bid/Ask и спред:</b><br>Bid ${getBid().toFixed(precision())} — цена, по которой закрывается BUY и открывается SELL.<br>Ask ${getAsk().toFixed(precision())} — цена, по которой открывается BUY и закрывается SELL.<br>Спред: <b>${sp.toFixed(precision())}</b>. Поэтому сразу после входа ордер может быть чуть в минусе.`:state.lang==='en'?`<b>Bid/Ask and spread:</b><br>Bid ${getBid().toFixed(precision())} — price for closing BUY and opening SELL.<br>Ask ${getAsk().toFixed(precision())} — price for opening BUY and closing SELL.<br>Spread: <b>${sp.toFixed(precision())}</b>. This is why a new order can start slightly negative.`:`<b>Bid/Ask და სპრედი:</b><br>Bid ${getBid().toFixed(precision())} — BUY-ის დახურვა და SELL-ის გახსნა.<br>Ask ${getAsk().toFixed(precision())} — BUY-ის გახსნა და SELL-ის დახურვა.<br>სპრედი: <b>${sp.toFixed(precision())}</b>. ამიტომ ახალი ორდერი შეიძლება თავიდან მცირე მინუსში იყოს.`;updateOrderPreview()}
+function updateOrderPreview(){const buy=calcVolume('BUY'),sell=calcVolume('SELL'),free=getFreeMargin(),afterBuy=free-buy.amount,afterSell=free-sell.amount,priceBuy=getAsk().toFixed(precision()),priceSell=getBid().toFixed(precision()),sp=getSpread().toFixed(precision());const maxOrders=state.mode==='novice'?state.maxNoviceOrders:state.maxProOrders;const warn=state.positions.length>=maxOrders;const risk=buy.amount/Math.max(1,state.balance)*100;let riskTxt=`${risk.toFixed(1)}% / ${riskLabel(risk)}`;$('orderBox').innerHTML=state.lang==='ru'?`<div class="clearTradeMain gold">Следующий клик откроет новый ордер</div><div class="clearTradeSub">Режим: <b>${state.mode==='novice'?'Новичок':'Профи'}</b>. BUY откроется по Ask, SELL откроется по Bid. Спред сразу учитывается в расчёте.</div><div class="spreadBox"><div class="spreadCell"><small>Bid</small><b>${priceSell}</b></div><div class="spreadCell"><small>Ask</small><b>${priceBuy}</b></div><div class="spreadCell"><small>Spread</small><b>${sp}</b></div></div><div class="clearGrid" style="margin-top:10px"><div class="clearCell"><small>BUY купит</small><b class="green">${buy.vol.toFixed(6)} ${state.asset}</b></div><div class="clearCell"><small>SELL продаст</small><b class="red">${sell.vol.toFixed(6)} ${state.asset}</b></div><div class="clearCell"><small>Маржа ордера</small><b class="gold">${money(buy.amount)}</b></div><div class="clearCell"><small>Номинал позиции</small><b>${money(buy.notional)}</b></div><div class="clearCell"><small>Free Margin сейчас</small><b class="blue">${money(free)}</b></div><div class="clearCell"><small>Останется после клика</small><b class="${afterBuy>=0?'green':'red'}">${money(afterBuy)}</b></div><div class="clearCell"><small>Риск ордера от Balance</small><b class="${riskClass(risk)}">${riskTxt}</b></div><div class="clearCell"><small>Открыто / лимит</small><b class="${warn?'riskDanger':'blue'}">${state.positions.length} / ${maxOrders}</b></div></div>${warn?'<div class="riskAlert">Предупреждение: открыто слишком много ордеров для выбранного режима. Лучше закрыть часть позиций или уменьшить маржу.</div>':''}<div class="stepNote">В режиме Новичок платформа предупреждает раньше и ограничивает перегрузку. В Профи можно больше ордеров, но риск выше.</div>`:state.lang==='en'?`<div class="clearTradeMain gold">Next click opens a new order</div><div class="clearTradeSub">Mode: <b>${state.mode==='novice'?'Beginner':'Pro'}</b>. BUY opens at Ask, SELL opens at Bid. Spread is included.</div><div class="spreadBox"><div class="spreadCell"><small>Bid</small><b>${priceSell}</b></div><div class="spreadCell"><small>Ask</small><b>${priceBuy}</b></div><div class="spreadCell"><small>Spread</small><b>${sp}</b></div></div><div class="clearGrid" style="margin-top:10px"><div class="clearCell"><small>BUY units</small><b class="green">${buy.vol.toFixed(6)} ${state.asset}</b></div><div class="clearCell"><small>SELL units</small><b class="red">${sell.vol.toFixed(6)} ${state.asset}</b></div><div class="clearCell"><small>Order margin</small><b class="gold">${money(buy.amount)}</b></div><div class="clearCell"><small>Position notional</small><b>${money(buy.notional)}</b></div><div class="clearCell"><small>Free Margin now</small><b class="blue">${money(free)}</b></div><div class="clearCell"><small>After click</small><b class="${afterBuy>=0?'green':'red'}">${money(afterBuy)}</b></div><div class="clearCell"><small>Order risk / Balance</small><b class="${riskClass(risk)}">${riskTxt}</b></div><div class="clearCell"><small>Open / limit</small><b class="${warn?'riskDanger':'blue'}">${state.positions.length} / ${maxOrders}</b></div></div>${warn?'<div class="riskAlert">Warning: too many open orders for this mode. Close some positions or reduce margin.</div>':''}<div class="stepNote">Beginner mode warns earlier and prevents overload. Pro mode allows more orders but risk is higher.</div>`:`<div class="clearTradeMain gold">შემდეგი დაჭერა ახალ ორდერს გახსნის</div><div class="clearTradeSub">რეჟიმი: <b>${state.mode==='novice'?'დამწყები':'პროფი'}</b>. BUY იხსნება Ask-ით, SELL — Bid-ით.</div><div class="spreadBox"><div class="spreadCell"><small>Bid</small><b>${priceSell}</b></div><div class="spreadCell"><small>Ask</small><b>${priceBuy}</b></div><div class="spreadCell"><small>Spread</small><b>${sp}</b></div></div><div class="clearGrid" style="margin-top:10px"><div class="clearCell"><small>BUY იყიდის</small><b class="green">${buy.vol.toFixed(6)} ${state.asset}</b></div><div class="clearCell"><small>SELL გაყიდის</small><b class="red">${sell.vol.toFixed(6)} ${state.asset}</b></div><div class="clearCell"><small>ორდერის მარჟა</small><b class="gold">${money(buy.amount)}</b></div><div class="clearCell"><small>ნომინალი</small><b>${money(buy.notional)}</b></div><div class="clearCell"><small>Free Margin</small><b class="blue">${money(free)}</b></div><div class="clearCell"><small>დარჩება</small><b class="${afterBuy>=0?'green':'red'}">${money(afterBuy)}</b></div><div class="clearCell"><small>რისკი Balance-იდან</small><b class="${riskClass(risk)}">${riskTxt}</b></div><div class="clearCell"><small>ღია / ლიმიტი</small><b class="${warn?'riskDanger':'blue'}">${state.positions.length} / ${maxOrders}</b></div></div>${warn?'<div class="riskAlert">გაფრთხილება: ძალიან ბევრი ღია ორდერია. დახურე ნაწილი ან შეამცირე მარჟა.</div>':''}<div class="stepNote">დამწყების რეჟიმი ადრე გაფრთხილებს. პროფი რეჟიმში მეტი ორდერია შესაძლებელი, მაგრამ რისკიც მეტია.</div>`}
+function updatePositions(){const body=$('positionsBody');if(!state.positions.length){body.innerHTML=`<tr><td colspan="7">${t('noPos')}</td></tr>`;return}body.innerHTML=state.positions.map((p,i)=>{const pnl=pnlOf(p),elapsed=Math.floor((Date.now()-p.openedAt)/1000),r=riskPct(p),cls=riskClass(r);return `<tr><td>${i+1}<br><span class="tiny">${elapsed}s</span></td><td class="${p.side==='BUY'?'green':'red'}"><b>${p.side}</b><br><span class="tiny">${p.asset}</span></td><td>${p.volume.toFixed(4)}<br><span class="tiny">${money(p.margin)} / ${p.lev}x</span></td><td>${p.entry.toFixed(precision(p.asset))}<br><span class="tiny">TP ${p.tp.toFixed(precision(p.asset))} / SL ${p.sl.toFixed(precision(p.asset))}</span><br><span class="tiny">Close @ ${(p.asset===state.asset?closePrice(p):p.entry).toFixed(precision(p.asset))}</span></td><td><b class="${cls}">${r.toFixed(1)}%</b><br><span class="tiny">${riskLabel(r)}</span></td><td class="${pnl>=0?'green':'red'}"><b>${money(pnl)}</b></td><td><button class="positionAction" onclick="closePosition('${p.id}','manual')">Close</button></td></tr>`}).join('')}
+function updateStats(){const h=state.history,wins=h.filter(x=>x.pnl>0).length,profit=h.filter(x=>x.pnl>0).reduce((s,x)=>s+x.pnl,0),loss=h.filter(x=>x.pnl<0).reduce((s,x)=>s+x.pnl,0),net=profit+loss;$('tradesN').textContent=h.length;$('profitN').textContent=money(profit);$('lossN').textContent=money(loss);$('netN').textContent=money(net);$('netN').className='v '+(net>=0?'green':'red');const body=$('history');body.innerHTML=h.length?h.map(x=>`<tr><td class="${x.side==='BUY'?'green':'red'}">${x.side}</td><td>${x.asset}</td><td>${x.volume.toFixed(4)}</td><td class="${x.pnl>=0?'green':'red'}">${money(x.pnl)}</td></tr>`).join(''):`<tr><td colspan="4">${t('historyEmpty')}</td></tr>`}
+function updateAll(){state.asset=$('asset').value;$('marketName').textContent=state.asset;$('priceNow').textContent=state.price.toFixed(precision());$('trendState').textContent=t('trend')+': '+t(trend());$('openCount').textContent=state.positions.length+' '+t('orders');const floating=getFloating(),equity=getEquity(),used=getUsedMargin(),free=getFreeMargin();$('balance').textContent=money(state.balance);$('equity').textContent=money(equity);$('equity').className='v '+(equity>=state.balance?'green':'red');$('available').textContent=money(free);$('available').className='v '+(free>=0?'blue':'red');$('locked').textContent=money(used);$('floating').textContent=money(floating);$('floating').className='v '+(floating>=0?'green':'red');$('marginLevel').textContent=used>0?Math.round(equity/used*100)+'%':'∞';$('tfExplain').textContent=I18N[state.lang].tfText[state.tf];if(state.tpSlMode==='ai')applyAiTpSl();updateTpHint();updateVolume();updatePositions();updateStats();}
+function openMarket(side){if(!hasAccess()){renderAccess();$('aiBox').innerHTML=state.lang==='ru'?'<span class="red">Бесплатные 10 минут закончились. Нужен доступ.</span>':state.lang==='en'?'<span class="red">The free 10 minutes are over. Access required.</span>':'<span class="red">უფასო დრო დასრულდა.</span>';return}const maxOrders=state.mode==='novice'?state.maxNoviceOrders:state.maxProOrders;if(state.positions.length>=maxOrders){$('aiBox').innerHTML=state.lang==='ru'?`<span class="red">Слишком много ордеров:</span> лимит режима ${state.mode==='novice'?'Новичок':'Профи'} — ${maxOrders}. Закрой часть позиций или перейди в другой режим.`:state.lang==='en'?`<span class="red">Too many orders:</span> ${state.mode==='novice'?'Beginner':'Pro'} mode limit is ${maxOrders}. Close some positions or change mode.`:`<span class="red">ძალიან ბევრი ორდერია:</span> ლიმიტი ${maxOrders}.`;return}const v=calcVolume(side),free=getFreeMargin();if(v.amount<=0||v.amount>free){$('aiBox').innerHTML=state.lang==='ru'?`<span class="red">Недостаточно Free Margin.</span> Нужно ${money(v.amount)}, доступно ${money(free)}.`:state.lang==='en'?`<span class="red">Not enough Free Margin.</span> Need ${money(v.amount)}, available ${money(free)}.`:`<span class="red">Free Margin არ არის საკმარისი.</span>`;return}const entry=orderPrice(side),tpPct=(+$('tp').value||1)/100,slPct=(+$('sl').value||1)/100,p={id:uid(),asset:state.asset,side,entry,volume:v.vol,margin:v.amount,notional:v.notional,lev:v.lev,tp:side==='BUY'?entry*(1+tpPct):entry*(1-tpPct),sl:side==='BUY'?entry*(1-slPct):entry*(1+slPct),spread:getSpread(),openTrend:trend(),tf:state.tf,openedAt:Date.now(),startBalance:state.balance};state.positions.unshift(p);const freeAfter=getFreeMargin();showLastOpen(p,free,freeAfter);const r=riskPct(p);$('aiBox').innerHTML=state.lang==='ru'?`${side==='BUY'?'🟢 Открыт BUY по Ask':'🔴 Открыт SELL по Bid'} #${state.positions.length}: <b>${v.vol.toFixed(6)} ${state.asset}</b>. Entry: <b>${entry.toFixed(precision())}</b>. Спред: <b>${getSpread().toFixed(precision())}</b>. Риск ордера: <b class="${riskClass(r)}">${r.toFixed(1)}%</b>. Маржа: <b>${money(v.amount)}</b>. Balance не изменился; Free Margin уменьшился.`:state.lang==='en'?`${side==='BUY'?'🟢 BUY opened at Ask':'🔴 SELL opened at Bid'}: <b>${v.vol.toFixed(6)} ${state.asset}</b>. Entry: <b>${entry.toFixed(precision())}</b>. Spread: <b>${getSpread().toFixed(precision())}</b>. Order risk: <b class="${riskClass(r)}">${r.toFixed(1)}%</b>. Margin: <b>${money(v.amount)}</b>. Balance did not change; Free Margin decreased.`:`${side==='BUY'?'🟢 BUY გაიხსნა Ask-ით':'🔴 SELL გაიხსნა Bid-ით'}: <b>${v.vol.toFixed(6)} ${state.asset}</b>. Entry: <b>${entry.toFixed(precision())}</b>. რისკი: <b class="${riskClass(r)}">${r.toFixed(1)}%</b>.`;updateAll();draw()}
+function closePosition(id,reason='manual'){const idx=state.positions.findIndex(p=>p.id===id);if(idx<0)return;const p=state.positions[idx],pnl=pnlOf(p);state.balance+=pnl;state.history.unshift({...p,pnl,exit:state.price,reason,balanceAfter:state.balance,closedAt:Date.now()});state.positions.splice(idx,1);showLastClose(p,pnl,reason);makeAnalysis(p,pnl,reason);updateAll();draw()}
+function closeAll(){[...state.positions].forEach(p=>closePosition(p.id,'manual all'))}
+function autoTpSl(){[...state.positions].forEach(p=>{if(!canAutoClose(p))return;if(p.side==='BUY'&&state.price>=p.tp)closePosition(p.id,'take profit');else if(p.side==='BUY'&&state.price<=p.sl)closePosition(p.id,'stop loss');else if(p.side==='SELL'&&state.price<=p.tp)closePosition(p.id,'take profit');else if(p.side==='SELL'&&state.price>=p.sl)closePosition(p.id,'stop loss')})}
+function makeAnalysis(p,pnl,reason){const ok=pnl>=0,tr=p.openTrend,align=(p.side==='BUY'&&tr==='up')||(p.side==='SELL'&&tr==='down'),risk=p.margin/(p.startBalance||state.balance||1)*100,r=reasonText(reason);let msg='';if(state.lang==='ru')msg=`<b>${ok?'Ордер закрыт с прибылью':'Ордер закрыт с убытком'} (${r}).</b><br>Результат: <b class="${ok?'green':'red'}">${money(pnl)}</b>. Тип: <b>${p.side}</b>. Объём: <b>${p.volume.toFixed(6)} ${p.asset}</b>. ${align?'Вход совпадал с трендом — это сильная сторона.':'Вход был против тренда или без ясного тренда — это ошибка новичка.'}<br><br><span class="gold">AI‑совет:</span> контролируй количество одновременно открытых ордеров. При серии BUY/SELL быстро растёт Used Margin, а Free Margin уменьшается.`;if(state.lang==='en')msg=`<b>${ok?'Order closed with profit':'Order closed with loss'} (${r}).</b><br>Result: <b class="${ok?'green':'red'}">${money(pnl)}</b>. Type: <b>${p.side}</b>. Volume: <b>${p.volume.toFixed(6)} ${p.asset}</b>. ${align?'Entry matched the trend — strong point.':'Entry was against/no clear trend — beginner mistake.'}<br><br><span class="gold">AI tip:</span> control the number of open orders. Used Margin grows fast when opening many orders.`;if(state.lang==='ka')msg=`<b>${ok?'ორდერი მოგებით დაიხურა':'ორდერი ზარალით დაიხურა'} (${r}).</b><br>შედეგი: <b class="${ok?'green':'red'}">${money(pnl)}</b>. ტიპი: <b>${p.side}</b>. ${align?'შესვლა ტრენდს ემთხვეოდა.':'შესვლა იყო ტრენდის წინააღმდეგ ან გაურკვეველ ბაზარში.'}<br><br><span class="gold">AI რჩევა:</span> აკონტროლე ერთდროულად ღია ორდერების რაოდენობა.`;$('aiBox').innerHTML=msg}
+function renderTerms(){ $('terms').innerHTML=I18N[state.lang].terms.map(([b,p])=>`<div class="term"><b>${b}</b><p>${p}</p></div>`).join('');$('howToUse').textContent=I18N[state.lang].how;$('tfLong').textContent=I18N[state.lang].tfLong;const samples={green:'greenC',red:'redC',doji:'dojiC',wick:'longWickC'};$('candleGuide').innerHTML=I18N[state.lang].candleGuide.map(([kind,b,p])=>`<div class="candleCard"><div class="candleSample"><span class="candle ${samples[kind]}"></span></div><b class="${kind==='green'?'green':kind==='red'?'red':'gold'}">${b}</b><span>${p}</span></div>`).join('')}
+
+function renderTradeEducation(){const html=state.lang==='ru'?`<div class="clearTradeMain blue">Как понимать BUY и SELL</div><div class="clearGrid"><div class="clearCell"><small>BUY MARKET</small><b class="green">Покупка / ставка на рост</b></div><div class="clearCell"><small>SELL MARKET</small><b class="red">Продажа / ставка на падение</b></div><div class="clearCell"><small>При BUY</small><b>цена должна расти ↑</b></div><div class="clearCell"><small>При SELL</small><b>цена должна падать ↓</b></div></div><div class="stepNote"><b>Важно:</b> Balance при открытии не списывается. Платформа блокирует маржу в Used Margin. Настоящий результат появляется после закрытия позиции и добавляется к Balance.</div>`:state.lang==='en'?`<div class="clearTradeMain blue">How to read BUY and SELL</div><div class="clearGrid"><div class="clearCell"><small>BUY MARKET</small><b class="green">Buy / bet on rise</b></div><div class="clearCell"><small>SELL MARKET</small><b class="red">Sell / bet on fall</b></div><div class="clearCell"><small>For BUY</small><b>price should go up ↑</b></div><div class="clearCell"><small>For SELL</small><b>price should go down ↓</b></div></div><div class="stepNote"><b>Important:</b> Balance is not charged at opening. Margin is locked in Used Margin. The real result appears after closing and is added to Balance.</div>`:`<div class="clearTradeMain blue">როგორ გავიგოთ BUY და SELL</div><div class="clearGrid"><div class="clearCell"><small>BUY MARKET</small><b class="green">ყიდვა / ზრდაზე შესვლა</b></div><div class="clearCell"><small>SELL MARKET</small><b class="red">გაყიდვა / ვარდნაზე შესვლა</b></div><div class="clearCell"><small>BUY-ის დროს</small><b>ფასი უნდა გაიზარდოს ↑</b></div><div class="clearCell"><small>SELL-ის დროს</small><b>ფასი უნდა დაეცეს ↓</b></div></div><div class="stepNote"><b>მნიშვნელოვანია:</b> გახსნისას Balance არ იჭრება. მარჟა იბლოკება Used Margin-ში. რეალური შედეგი ჩნდება დახურვის შემდეგ და ემატება Balance-ს.</div>`;$('tradeExplainBox').innerHTML=html;if(!$('lastActionBox').dataset.filled){$('lastActionBox').innerHTML=state.lang==='ru'?`<div class="clearTradeMain gold">Последнее действие</div><div class="clearTradeSub">Пока ордер не открыт. Нажми BUY или SELL — здесь появится точный отчёт: что куплено/продано, сколько маржи заблокировано и сколько осталось.</div>`:state.lang==='en'?`<div class="clearTradeMain gold">Last action</div><div class="clearTradeSub">No order opened yet. Press BUY or SELL and this block will show exact units, locked margin and remaining free margin.</div>`:`<div class="clearTradeMain gold">ბოლო მოქმედება</div><div class="clearTradeSub">ორდერი ჯერ არ გახსნილა. დააჭირე BUY ან SELL და აქ გამოჩნდება რაოდენობა, დაბლოკილი მარჟა და დარჩენილი თანხა.</div>`}}
+function showLastOpen(p,freeBefore,freeAfter){state.lastAction={kind:'open',p,freeBefore,freeAfter};const px=p.entry.toFixed(precision(p.asset));const dir=p.side==='BUY'?'BUY':'SELL';const need=p.side==='BUY'?(state.lang==='ru'?'чтобы заработать, цена должна вырасти ↑':state.lang==='en'?'to profit, price must rise ↑':'მოგებისთვის ფასი უნდა გაიზარდოს ↑'):(state.lang==='ru'?'чтобы заработать, цена должна упасть ↓':state.lang==='en'?'to profit, price must fall ↓':'მოგებისთვის ფასი უნდა დაეცეს ↓');$('lastActionBox').dataset.filled='1';$('lastActionBox').innerHTML=state.lang==='ru'?`<div class="clearTradeMain ${p.side==='BUY'?'green':'red'}">Открыт ${dir}: ${p.volume.toFixed(6)} ${p.asset}</div><div class="clearTradeSub">Цена входа: <b>${px}</b>. ${need}. Это отдельный ордер; следующий клик откроет ещё один ордер.</div><div class="clearGrid"><div class="clearCell"><small>Balance</small><b>${money(state.balance)} не изменился</b></div><div class="clearCell"><small>Заблокирована маржа</small><b class="gold">${money(p.margin)}</b></div><div class="clearCell"><small>Free Margin было</small><b class="blue">${money(freeBefore)}</b></div><div class="clearCell"><small>Free Margin стало</small><b class="blue">${money(freeAfter)}</b></div><div class="clearCell"><small>Номинал позиции</small><b>${money(p.notional)}</b></div><div class="clearCell"><small>Плечо</small><b>${p.lev}x</b></div></div>`:state.lang==='en'?`<div class="clearTradeMain ${p.side==='BUY'?'green':'red'}">${dir} opened: ${p.volume.toFixed(6)} ${p.asset}</div><div class="clearTradeSub">Entry price: <b>${px}</b>. ${need}. This is a separate order; the next click opens another order.</div><div class="clearGrid"><div class="clearCell"><small>Balance</small><b>${money(state.balance)} unchanged</b></div><div class="clearCell"><small>Locked margin</small><b class="gold">${money(p.margin)}</b></div><div class="clearCell"><small>Free Margin before</small><b class="blue">${money(freeBefore)}</b></div><div class="clearCell"><small>Free Margin after</small><b class="blue">${money(freeAfter)}</b></div><div class="clearCell"><small>Position notional</small><b>${money(p.notional)}</b></div><div class="clearCell"><small>Leverage</small><b>${p.lev}x</b></div></div>`:`<div class="clearTradeMain ${p.side==='BUY'?'green':'red'}">გაიხსნა ${dir}: ${p.volume.toFixed(6)} ${p.asset}</div><div class="clearTradeSub">Entry ფასი: <b>${px}</b>. ${need}. ეს ცალკე ორდერია; შემდეგი დაჭერა კიდევ ერთ ორდერს გახსნის.</div><div class="clearGrid"><div class="clearCell"><small>Balance</small><b>${money(state.balance)} არ შეცვლილა</b></div><div class="clearCell"><small>დაბლოკილი მარჟა</small><b class="gold">${money(p.margin)}</b></div><div class="clearCell"><small>Free Margin იყო</small><b class="blue">${money(freeBefore)}</b></div><div class="clearCell"><small>Free Margin გახდა</small><b class="blue">${money(freeAfter)}</b></div><div class="clearCell"><small>პოზიციის ნომინალი</small><b>${money(p.notional)}</b></div><div class="clearCell"><small>ლევერიჯი</small><b>${p.lev}x</b></div></div>`}
+function reasonText(reason){const map={
+  ru:{manual:'ручное закрытие', 'manual all':'закрытие всех позиций', 'take profit':'Take Profit', 'stop loss':'Stop Loss'},
+  en:{manual:'Manual close', 'manual all':'Close All Positions', 'take profit':'Take Profit', 'stop loss':'Stop Loss'},
+  ka:{manual:'ხელით დახურვა', 'manual all':'ყველა პოზიციის დახურვა', 'take profit':'Take Profit', 'stop loss':'Stop Loss'}
+};return (map[state.lang]&&map[state.lang][reason])||reason}
+function showLastClose(p,pnl,reason){state.lastAction={kind:'close',p,pnl,reason};const r=reasonText(reason);$('lastActionBox').dataset.filled='1';$('lastActionBox').innerHTML=state.lang==='ru'?`<div class="clearTradeMain ${pnl>=0?'green':'red'}">Закрыт ${p.side}: результат ${money(pnl)}</div><div class="clearTradeSub">Причина: <b>${r}</b>. Маржа <b>${money(p.margin)}</b> освобождена. Результат сделки уже добавлен к Balance.</div>`:state.lang==='en'?`<div class="clearTradeMain ${pnl>=0?'green':'red'}">${p.side} closed: result ${money(pnl)}</div><div class="clearTradeSub">Reason: <b>${r}</b>. Margin <b>${money(p.margin)}</b> released. The trade result has already been added to Balance.</div>`:`<div class="clearTradeMain ${pnl>=0?'green':'red'}">${p.side} დაიხურა: შედეგი ${money(pnl)}</div><div class="clearTradeSub">მიზეზი: <b>${r}</b>. მარჟა <b>${money(p.margin)}</b> გათავისუფლდა. გარიგების შედეგი უკვე დაემატა Balance-ს.</div>`}
+
+function applyLang(){localStorage.setItem('afx_lang',state.lang);document.documentElement.lang=state.lang;document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===state.lang));$('aiBox').innerHTML=t('aiStart');renderTerms();renderTradeEducation();renderForexIntro();renderInternalPromo();renderFirstTradeGuide();renderAccess();updateAll();if(state.lastAction){const a=state.lastAction;if(a.kind==='open')showLastOpen(a.p,a.freeBefore,a.freeAfter);if(a.kind==='close')showLastClose(a.p,a.pnl,a.reason)}draw()}
+function hasAccess(){ensureAdminAccess();return isAdminUser()||Date.now()-state.trialStart<state.trialMs||Date.now()<state.paidUntil}
+function accessLeftMs(){ensureAdminAccess();return isAdminUser()?100*365*24*60*60*1000:Math.max(Date.now()<state.paidUntil?state.paidUntil-Date.now():0,state.trialMs-(Date.now()-state.trialStart))}
+function formatTimeMs(ms){ms=Math.max(0,ms);const s=Math.ceil(ms/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),r=s%60;return h>0?String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(r).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(r).padStart(2,'0')}
+function renderAccessFeatures(){
+  const items = state.lang==='ru'
+    ? ['BUY / SELL','AI-анализ','Без реальных денег','История сделок']
+    : state.lang==='en'
+      ? ['BUY / SELL','AI Analysis','No real money','Trade History']
+      : ['BUY / SELL','AI ანალიზი','რეალური ფულის გარეშე','გარიგებების ისტორია'];
+  const el=$('accessFeatures');
+  if(el) el.innerHTML=items.map(x=>`<span class="accessFeature">${x}</span>`).join('');
+}
+
+function hardRemoveTelegramOpenButtons(){
+  try{
+    document.querySelectorAll('button,a,div').forEach(el=>{
+      const txt=(el.textContent||'').trim().toUpperCase();
+      if(txt.includes('ОТКРЫТЬ В TELEGRAM') || txt.includes('OPEN IN TELEGRAM') || txt.includes('OPEN TELEGRAM') || txt.includes('ОТКРЫТЬ TELEGRAM')){
+        el.classList.add('hiddenTelegramOpen');
+        el.style.setProperty('display','none','important');
+        el.style.setProperty('visibility','hidden','important');
+        el.remove();
+      }
+    });
+  }catch(e){}
+}
+function forceCurrentAccessTexts(){
+  try{
+    if($('pay30')) $('pay30').textContent='⭐ 30 минут — 100 Stars';
+    if($('payDay')) $('payDay').textContent='⭐ 24 часа — 300 Stars';
+    if($('payHint')) $('payHint').textContent='Админ-код даёт постоянный доступ на этом устройстве.';
+  }catch(e){}
+}
+
+
+function isAppFullscreen(){
+  return document.body.classList.contains('appFullscreen') || !!document.fullscreenElement;
+}
+function updateFullscreenButtons(){
+  const full=isAppFullscreen();
+  const labels={
+    ru:{mainFull:'⛶ ПОЛНЫЙ ЭКРАН',mainExit:'🗗 УМЕНЬШИТЬ ЭКРАН',floatFull:'⛶ FULL',floatExit:'↙ EXIT'},
+    en:{mainFull:'⛶ FULL SCREEN',mainExit:'🗗 EXIT FULL SCREEN',floatFull:'⛶ FULL',floatExit:'↙ EXIT'},
+    ka:{mainFull:'⛶ სრული ეკრანი',mainExit:'🗗 ეკრანის შემცირება',floatFull:'⛶ FULL',floatExit:'↙ EXIT'}
+  };
+  const l=labels[state.lang]||labels.ru;
+  if($('fullScreenBtn')) $('fullScreenBtn').textContent=full?l.mainExit:l.mainFull;
+  if($('floatingFullScreenBtn')) $('floatingFullScreenBtn').textContent=full?l.floatExit:l.floatFull;
+}
+function enterAppFullscreen(){
+  const tg=isTelegramMiniApp()?window.Telegram.WebApp:null;
+  document.body.classList.add('appFullscreen');
+  document.body.classList.toggle('tgMiniApp', !!tg);
+  applyTelegramViewport();
+  try{
+    if(tg){
+      tg.ready && tg.ready();
+      tg.expand && tg.expand();
+      tg.requestFullscreen && tg.requestFullscreen();
+      tg.disableVerticalSwipes && tg.disableVerticalSwipes();
+      tg.setHeaderColor && tg.setHeaderColor('#050816');
+      tg.setBackgroundColor && tg.setBackgroundColor('#050816');
+    }else if(!document.fullscreenElement){
+      const root=document.documentElement;
+      const req=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;
+      req && req.call(root);
+    }
+  }catch(e){}
+  updateFullscreenButtons();
+  setTimeout(()=>{try{renderAccess();draw()}catch(e){}},250);
+}
+function exitAppFullscreen(){
+  const tg=isTelegramMiniApp()?window.Telegram.WebApp:null;
+  document.body.classList.remove('appFullscreen');
+  applyTelegramViewport();
+  try{
+    if(tg){
+      tg.exitFullscreen && tg.exitFullscreen();
+      tg.enableVerticalSwipes && tg.enableVerticalSwipes();
+    }
+    if(document.fullscreenElement){
+      const exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+      exit && exit.call(document);
+    }
+  }catch(e){}
+  updateFullscreenButtons();
+  setTimeout(()=>{try{renderAccess();draw()}catch(e){}},250);
+}
+
+function renderAccess(){
+  ensureAdminAccess();
+  hardRemoveTelegramOpenButtons();
+  forceCurrentAccessTexts();
+  const admin=isAdminUser();
+  const paid=admin||Date.now()<state.paidUntil;
+  const trialActive=Date.now()-state.trialStart<state.trialMs;
+  const ok=paid||trialActive;
+  const left=formatTimeMs(accessLeftMs());
+  renderAccessFeatures();
+
+  $('accessStatus').classList.toggle('locked',!ok);
+  $('payBox').classList.toggle('show',!ok);
+
+  if(ok){
+    $('trialTimer').textContent=left;
+  }else{
+    $('trialTimer').textContent='00:00';
+  }
+
+  if(state.lang==='ru'){
+    if(paid){
+      $('accessStatus').textContent=admin?'👑 Админ-доступ активен':'🟢 Активно — '+left;
+      $('trialTitle').textContent=admin?'Администратор: постоянный доступ':'Доступ активен';
+      $('trialText').textContent=admin?'Админ-доступ сохранён на этом устройстве. Ограничение 10 минут и оплата для вас отключены.':'Можно продолжать игру и тренировку. После окончания времени снова выберите 30 минут, 24 часа или введите админ-код.';
+    }else if(trialActive){
+      $('accessStatus').textContent='🟡 Бесплатно — '+left;
+      $('trialTitle').textContent='Игра бесплатно 10 минут';
+      $('trialText').textContent='Пробный период длится 10 минут. Потом можно купить 30 минут за 100⭐ или 24 часа за 300⭐. Админ-код сохраняет постоянный доступ на этом устройстве.';
+    }else{
+      $('accessStatus').textContent='🔒 Пробный период закончился';
+      $('trialTitle').textContent='Выберите продолжение';
+      $('trialText').textContent='Бесплатные 10 минут закончились. Дальше: 30 минут — 100⭐ или 24 часа — 300⭐. Администратор может ввести код и получить постоянный доступ на этом устройстве.';
+    }
+    $('payTitle').textContent='Продолжить игру:';
+    $('pay30').textContent='⭐ 30 минут — 100 Stars';
+    $('payDay').textContent='⭐ 24 часа — 300 Stars';
+    $('accessCode').placeholder='Код доступа или админ-код';
+    $('payHint').textContent='Админ-код выдаёт постоянный админ-доступ на этом устройстве.';
+    if($('telegramBtn')) $('telegramBtn').style.display='none';
+    $('fullScreenBtn').textContent=document.fullscreenElement?'⛶ ВЫЙТИ ИЗ ПОЛНОГО ЭКРАНА':'⛶ ПОЛНЫЙ ЭКРАН';
+  }
+  if(state.lang==='en'){
+    if(paid){
+      $('accessStatus').textContent=admin?'👑 Admin access active':'🟢 Active — '+left;
+      $('trialTitle').textContent=admin?'Administrator: permanent access':'Access active';
+      $('trialText').textContent='You can continue playing and training. When time ends, choose 30 minutes, 24 hours, or enter the admin code.';
+    }else if(trialActive){
+      $('accessStatus').textContent='🟡 Free — '+left;
+      $('trialTitle').textContent='Game is free for 10 minutes';
+      $('trialText').textContent='The trial lasts 10 minutes. Then you can buy 30 minutes for 100⭐ or 24 hours for 300⭐. The admin code keeps permanent access on this device.';
+    }else{
+      $('accessStatus').textContent='🔒 Trial ended';
+      $('trialTitle').textContent='Choose continuation';
+      $('trialText').textContent='The free 10 minutes are over. Next: 30 minutes — 100⭐ or 24 hours — 300⭐. The administrator can enter a code to get permanent access on this device.';
+    }
+    $('payTitle').textContent='Continue playing:';
+    $('pay30').textContent='⭐ 30 minutes — 100 Stars';
+    $('payDay').textContent='⭐ 24 hours — 300 Stars';
+    $('accessCode').placeholder='Access code or admin code';
+    $('payHint').textContent='The admin code grants permanent admin access on this device.';
+    if($('telegramBtn')) $('telegramBtn').style.display='none';
+    $('fullScreenBtn').textContent=document.fullscreenElement?'⛶ EXIT FULL SCREEN':'⛶ FULL SCREEN';
+  }
+  if(state.lang==='ka'){
+    if(paid){
+      $('accessStatus').textContent=admin?'👑 ადმინ-წვდომა აქტიურია':'🟢 აქტიურია — '+left;
+      $('trialTitle').textContent=admin?'ადმინისტრატორი: მუდმივი წვდომა':'წვდომა აქტიურია';
+      $('trialText').textContent='შეგიძლია გააგრძელო თამაში და ვარჯიში. დროის დასრულების შემდეგ აირჩიე 30 წუთი, 24 საათი ან შეიყვანე ადმინის კოდი.';
+    }else if(trialActive){
+      $('accessStatus').textContent='🟡 უფასოდ — '+left;
+      $('trialTitle').textContent='თამაში უფასოა 10 წუთი';
+      $('trialText').textContent='საცდელი პერიოდი გრძელდება 10 წუთი. შემდეგ შეგიძლია შეიძინო 30 წუთი ან 24 საათი. ადმინის კოდი ამ მოწყობილობაზე მუდმივ ადმინ-წვდომას იძლევა.';
+    }else{
+      $('accessStatus').textContent='🔒 უფასო პერიოდი დასრულდა';
+      $('trialTitle').textContent='აირჩიე გაგრძელება';
+      $('trialText').textContent='უფასო 10 წუთი დასრულდა. შემდეგ: 30 წუთი ან 24 საათი. ადმინისტრატორს შეუძლია კოდით მიიღოს მუდმივი წვდომა ამ მოწყობილობაზე.';
+    }
+    $('payTitle').textContent='თამაშის გაგრძელება:';
+    $('pay30').textContent='⭐ 30 წუთი — 100 Stars';
+    $('payDay').textContent='⭐ 24 საათი — 300 Stars';
+    $('accessCode').placeholder='წვდომის ან ადმინის კოდი';
+    $('payHint').textContent='ადმინის კოდი ამ მოწყობილობაზე მუდმივ ადმინ-წვდომას იძლევა.';
+    if($('telegramBtn')) $('telegramBtn').style.display='none';
+    $('fullScreenBtn').textContent=document.fullscreenElement?'⛶ სრული ეკრანიდან გამოსვლა':'⛶ სრული ეკრანი';
+  }
+
+  updateFullscreenButtons();
+  ['buyBtn','sellBtn','closeAllBtn','amount','lev','tp','sl','asset','manualTpBtn','aiTpBtn'].forEach(id=>$(id).classList.toggle('accessLocked',!ok));
+}
+function grantAccess(ms){state.paidUntil=Date.now()+ms;localStorage.setItem('afx_paid_until',state.paidUntil);renderAccess();$('aiBox').innerHTML=state.lang==='ru'?'🟢 Премиум активен. Можно продолжать тренировку.':state.lang==='en'?'🟢 Premium active. Training can continue.':'🟢 პრემიუმი აქტიურია.'}
+function grantAdminAccess(){localStorage.setItem('afx_admin_access','yes');grantAccess(100*365*24*60*60*1000);$('aiBox').innerHTML=state.lang==='ru'?'👑 Админ-код принят: админ-доступ открыт постоянно на этом устройстве.':state.lang==='en'?'👑 Admin code accepted: permanent admin access is active on this device.':'👑 ადმინის კოდი მიღებულია: ამ მოწყობილობაზე მუდმივი ადმინ-წვდომა აქტიურია.'}
+['1m','5m','15m','1h','4h','1D'].forEach(tf=>{let b=document.createElement('button');b.className='tf'+(tf===state.tf?' active':'');b.textContent=tf;b.onclick=()=>{state.tf=tf;document.querySelectorAll('.tf').forEach(x=>x.classList.remove('active'));b.classList.add('active');genCandles()};$('tfTabs').appendChild(b)});document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{state.lang=b.dataset.lang;applyLang()});$('buyBtn').onclick=()=>openMarket('BUY');$('sellBtn').onclick=()=>openMarket('SELL');$('closeAllBtn').onclick=closeAll;$('noviceBtn').onclick=()=>{state.mode='novice';$('noviceBtn').classList.add('active');$('proBtn').classList.remove('active');updateAll()};$('proBtn').onclick=()=>{state.mode='pro';$('proBtn').classList.add('active');$('noviceBtn').classList.remove('active');updateAll()};$('manualTpBtn').onclick=()=>setTpSlMode('manual');$('aiTpBtn').onclick=()=>setTpSlMode('ai');$('asset').onchange=()=>{if(state.positions.length){$('asset').value=state.asset;$('aiBox').innerHTML=state.lang==='ru'?'<span class="red">Сначала закрой все открытые позиции, потом меняй актив. Иначе PnL будет считаться неправильно.</span>':state.lang==='en'?'<span class="red">Close all open positions before changing the asset. Otherwise PnL will be calculated incorrectly.</span>':'<span class="red">ჯერ დახურე ყველა პოზიცია და შემდეგ შეცვალე აქტივი.</span>';return}state.asset=$('asset').value;genCandles()};['amount','lev'].forEach(id=>$(id).oninput=updateAll);['tp','sl'].forEach(id=>$(id).oninput=()=>{if(state.tpSlMode==='ai'){state.tpSlMode='manual';localStorage.setItem('afx_tpsl_mode','manual');$('manualTpBtn').classList.add('active');$('aiTpBtn').classList.remove('active');}updateTpHint();updateAll()});
+const BOT_USERNAME='AncientForexAIBot';
+const BOT_DIRECT_URL='https://t.me/AncientForexAIBot';
+const ACCESS_PLANS={
+  m30:{minutes:30,stars:100,start:'buy_30m_100stars'},
+  day:{hours:24,stars:300,start:'buy_24h_300stars'}
+};
+
+const ADMIN_USERNAMES=['vakhtangtskhomelidze','vakho71','vaxo1971'];
+const ADMIN_CODES=['ADMIN','ADMIN-24','ADMIN-ACCESS','FOREX-ADMIN','VAKHO','VAKHO71','VAXO','555','IRABASHIDZE555','VAKHO-ADMIN-UNLIMITED-2026','VAKHO–ADMIN–UNLIMITED–2026','VAKHO—ADMIN—UNLIMITED—2026','VAKHO ADMIN UNLIMITED 2026'];
+function getStartParam(){
+  try{
+    const tg=isTelegramMiniApp()?window.Telegram.WebApp:null;
+    if(tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) return String(tg.initDataUnsafe.start_param||'');
+  }catch(e){}
+  try{
+    const u=new URL(window.location.href);
+    return String(u.searchParams.get('start')||u.searchParams.get('tgWebAppStartParam')||u.searchParams.get('admin')||'');
+  }catch(e){return ''}
+}
+function isAdminUser(){
+  try{
+    const tg=isTelegramMiniApp()?window.Telegram.WebApp:null;
+    const u=tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+    const username=String((u && u.username) || '').toLowerCase();
+    if(username && ADMIN_USERNAMES.includes(username)) return true;
+  }catch(e){}
+  const start=getStartParam().toLowerCase();
+  if(['admin','owner','vakho','vakho71','forex_admin'].includes(start)) return true;
+  try{
+    const q=new URL(window.location.href).searchParams;
+    if(q.get('admin')==='1' || q.get('owner')==='1') return true;
+  }catch(e){}
+  return localStorage.getItem('afx_admin_access')==='yes';
+}
+function ensureAdminAccess(){
+  if(isAdminUser()){
+    localStorage.setItem('afx_admin_access','yes');
+    const permanent=Date.now()+100*365*24*60*60*1000;
+    if(!state.paidUntil || state.paidUntil<permanent-1000){
+      state.paidUntil=permanent;
+      localStorage.setItem('afx_paid_until',state.paidUntil);
+    }
+  }
+}
+
+function isTelegramMiniApp(){
+  return !!(window.Telegram && window.Telegram.WebApp);
+}
+function applyTelegramViewport(){
+  const tg = isTelegramMiniApp() ? window.Telegram.WebApp : null;
+  const h = tg && (tg.viewportStableHeight || tg.viewportHeight);
+  if(h){
+    document.documentElement.style.setProperty('--tg-viewport-height', h + 'px');
+  }else{
+    document.documentElement.style.setProperty('--tg-viewport-height', window.innerHeight + 'px');
+  }
+}
+function activateTelegramFullscreen(){
+  const tg = isTelegramMiniApp() ? window.Telegram.WebApp : null;
+  enterAppFullscreen();
+  try{
+    if(tg){
+      tg.onEvent && tg.onEvent('viewportChanged', function(){
+        applyTelegramViewport();
+        setTimeout(()=>{try{draw();updateFullscreenButtons()}catch(e){}},120);
+      });
+    }
+  }catch(e){}
+}
+function initTelegramMiniAppUI(){
+  ensureAdminAccess();
+  document.querySelectorAll('#telegramBtn,.telegramBtn').forEach(el=>el.remove());
+  if(isTelegramMiniApp()){
+    activateTelegramFullscreen();
+  }else{
+    applyTelegramViewport();
+  }
+}
+function openBotLink(path){
+  const payload=(path||'?start=play').replace(/^\?start=/,'').replace(/^start=/,'');
+  const directUrl=BOT_DIRECT_URL+'?start='+encodeURIComponent(payload);
+  try{
+    const tg=isTelegramMiniApp()?window.Telegram.WebApp:null;
+    if(tg){
+      tg.expand && tg.expand();
+      tg.openTelegramLink ? tg.openTelegramLink(directUrl) : window.location.href=directUrl;
+      return;
+    }
+  }catch(e){}
+  window.open(directUrl,'_blank');
+}
+function toggleFullScreen(){
+  if(isAppFullscreen()){
+    exitAppFullscreen();
+  }else{
+    enterAppFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){document.body.classList.remove('appFullscreen')}else{document.body.classList.add('appFullscreen')}applyTelegramViewport();updateFullscreenButtons();renderAccess();draw();});
+window.addEventListener('resize',()=>{applyTelegramViewport();updateFullscreenButtons();try{draw()}catch(e){}});
+function requestStarsPlan(plan){
+  const cfg=plan==='day'?ACCESS_PLANS.day:ACCESS_PLANS.m30;
+  openBotLink('?start='+cfg.start);
+}
+$('pay30').onclick=()=>requestStarsPlan('m30');
+$('payDay').onclick=()=>requestStarsPlan('day');
+if($('telegramBtn')){$('telegramBtn').remove();}
+$('fullScreenBtn').onclick=toggleFullScreen;if($('floatingFullScreenBtn')) $('floatingFullScreenBtn').onclick=toggleFullScreen;hardRemoveTelegramOpenButtons();forceCurrentAccessTexts();setInterval(()=>{hardRemoveTelegramOpenButtons();forceCurrentAccessTexts();},800);
+function normalizeAccessCode(v){return String(v||'').trim().toUpperCase().replace(/[–—−]/g,'-').replace(/\s+/g,'-');}
+function isAdminCode(v){const c=normalizeAccessCode(v);return ADMIN_CODES.map(normalizeAccessCode).includes(c);}
+$('applyCode').onclick=()=>{const raw=($('accessCode').value||'');const code=normalizeAccessCode(raw);if(isAdminCode(raw)){grantAdminAccess();renderAccess();return;}else if(code==='DEMO-ACCESS'||code==='TEST-ACCESS'){grantAccess(24*60*60*1000);return;}else $('aiBox').innerHTML='<span class="red">Invalid access code / неверный код</span>';};
+
+
+// TELEGRAM MINI APP FINAL INIT — safe on Telegram and normal browser
+(function initTelegramMiniAppFinal(){
+  try{
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if(!tg) return;
+    document.body.classList.add('tgMiniApp');
+    tg.ready && tg.ready();
+    tg.expand && tg.expand();
+    tg.setHeaderColor && tg.setHeaderColor('#050816');
+    tg.setBackgroundColor && tg.setBackgroundColor('#050816');
+    if(tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+    const syncViewport=function(){
+      const h = tg.viewportStableHeight || tg.viewportHeight || window.innerHeight;
+      document.documentElement.style.setProperty('--tg-viewport-height', h + 'px');
+      document.body.classList.add('appFullscreen');
+      if(typeof updateFullscreenButtons==='function') updateFullscreenButtons();
+      if(typeof draw==='function') setTimeout(function(){try{draw()}catch(e){}},80);
+    };
+    syncViewport();
+    tg.onEvent && tg.onEvent('viewportChanged', syncViewport);
+  }catch(e){}
+})();
+
+ensureAdminAccess();
+initTelegramMiniAppUI();
+ensureAdminAccess();
+$('manualTpBtn').classList.toggle('active',state.tpSlMode==='manual');$('aiTpBtn').classList.toggle('active',state.tpSlMode==='ai');if(state.tpSlMode==='ai')applyAiTpSl();genCandles();applyLang();setInterval(nextCandle,2500);setInterval(()=>{renderAccess();if(state.positions.length){updateAll();draw()}},1000);
+</script>
+</body>
+</html>
