@@ -1,15 +1,9 @@
 import os
 import time
-import threading
 from flask import Flask, send_from_directory, jsonify, request
 
-try:
-    import telebot
-    from telebot import types
-except Exception as e:
-    print("Telegram import error:", e)
-    telebot = None
-    types = None
+import telebot
+from telebot import types
 
 APP_URL = "https://ancient-forex-bot.onrender.com"
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
@@ -19,7 +13,7 @@ app = Flask(__name__)
 access_until = {}
 trial_used = set()
 
-bot = telebot.TeleBot(BOT_TOKEN) if BOT_TOKEN and telebot else None
+bot = telebot.TeleBot(BOT_TOKEN) if BOT_TOKEN else None
 
 
 @app.route("/")
@@ -47,29 +41,21 @@ def api_access():
 
 def keyboard():
     kb = types.InlineKeyboardMarkup()
-
-    kb.add(types.InlineKeyboardButton(
-        "🎮 OPEN GAME",
-        web_app=types.WebAppInfo(APP_URL + "/")
-    ))
-
+    kb.add(types.InlineKeyboardButton("🎮 OPEN GAME", web_app=types.WebAppInfo(APP_URL + "/")))
     kb.add(types.InlineKeyboardButton("🆓 FREE 5 MIN", callback_data="trial"))
     kb.add(types.InlineKeyboardButton("⭐ 1 HOUR — 50", callback_data="pay1"))
     kb.add(types.InlineKeyboardButton("⭐ 24 HOURS — 150", callback_data="pay24"))
     kb.add(types.InlineKeyboardButton("⭐ 48 HOURS — 300", callback_data="pay48"))
     kb.add(types.InlineKeyboardButton("⏳ MY ACCESS", callback_data="access"))
-
     return kb
 
 
 if bot:
-
     @bot.message_handler(commands=["start"])
     def start(msg):
         bot.send_message(
             msg.chat.id,
-            """
-🃏 Ancient Card Games
+            """🃏 Ancient Card Games
 
 🎮 Ancient Poker
 🂡 Emperor's 21
@@ -81,8 +67,7 @@ if bot:
 ⭐ 48 hours — 300 Stars
 
 Training & entertainment only.
-No real money. No gambling. No withdrawals.
-""",
+No real money. No gambling. No withdrawals.""",
             reply_markup=keyboard()
         )
 
@@ -161,26 +146,28 @@ No real money. No gambling. No withdrawals.
         bot.send_message(msg.chat.id, "✅ Access activated.", reply_markup=keyboard())
 
 
-def start_bot_polling():
+@app.route("/webhook", methods=["POST"])
+def webhook():
     if not bot:
-        print("BOT_TOKEN is missing or telebot is not installed.")
+        return "BOT_TOKEN missing", 500
+
+    update = types.Update.de_json(request.get_data().decode("utf-8"))
+    bot.process_new_updates([update])
+    return "OK", 200
+
+
+def setup_webhook():
+    if not bot:
+        print("BOT_TOKEN is missing.")
         return
 
-    while True:
-        try:
-            print("Ancient Card Games bot polling started")
-            bot.remove_webhook()
-            time.sleep(1)
-            bot.infinity_polling(timeout=20, long_polling_timeout=20)
-        except Exception as e:
-            print("Bot polling error:", e)
-            time.sleep(5)
+    bot.remove_webhook()
+    time.sleep(1)
+    webhook_url = APP_URL + "/webhook"
+    bot.set_webhook(url=webhook_url)
+    print("Webhook set:", webhook_url)
 
 
 if __name__ == "__main__":
-    threading.Thread(target=start_bot_polling, daemon=True).start()
-
-    app.run(
-        host="0.0.0.0",
-        port=int(os.getenv("PORT", 10000))
-    )
+    setup_webhook()
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 10000)))
