@@ -1,19 +1,41 @@
 import os
 import time
-from flask import Flask, send_from_directory, jsonify, request
+from flask import Flask, request, jsonify, send_from_directory
 
 import telebot
 from telebot import types
 
-APP_URL = "https://ancient-forex-bot.onrender.com"
+
+APP_URL = os.getenv("APP_URL", "https://ancient-forex-bot.onrender.com").rstrip("/")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+WEBHOOK_PATH = "/webhook"
 
 app = Flask(__name__)
 
-access_until = {}
-trial_used = set()
+bot = telebot.TeleBot(BOT_TOKEN, parse_mode="HTML") if BOT_TOKEN else None
 
-bot = telebot.TeleBot(BOT_TOKEN) if BOT_TOKEN else None
+access_until = {}
+free_used = set()
+stats = {
+    "starts": 0,
+    "free_trials": 0,
+    "payments": 0,
+}
+
+
+GAME_URL = APP_URL
+
+
+def main_menu():
+    kb = types.InlineKeyboardMarkup(row_width=1)
+
+    kb.add(types.InlineKeyboardButton("🎮 Играть", web_app=types.WebAppInfo(GAME_URL)))
+    kb.add(types.InlineKeyboardButton("🎁 Бесплатный демо-доступ", callback_data="free_demo"))
+    kb.add(types.InlineKeyboardButton("⭐ Купить доступ 1 час — 50 Stars", callback_data="buy_1h"))
+    kb.add(types.InlineKeyboardButton("📊 Статистика", callback_data="stats"))
+    kb.add(types.InlineKeyboardButton("ℹ️ Информация", callback_data="info"))
+
+    return kb
 
 
 @app.route("/")
@@ -28,9 +50,9 @@ def health():
 
 @app.route("/api/access")
 def api_access():
-    user = request.args.get("user", "")
+    user_id = request.args.get("user_id", "")
     now = int(time.time())
-    until = access_until.get(user, 0)
+    until = access_until.get(user_id, 0)
 
     return jsonify({
         "active": until > now,
@@ -39,135 +61,142 @@ def api_access():
     })
 
 
-def keyboard():
-    kb = types.InlineKeyboardMarkup()
-    kb.add(types.InlineKeyboardButton("🎮 OPEN GAME", web_app=types.WebAppInfo(APP_URL + "/")))
-    kb.add(types.InlineKeyboardButton("🆓 FREE 5 MIN", callback_data="trial"))
-    kb.add(types.InlineKeyboardButton("⭐ 1 HOUR — 50", callback_data="pay1"))
-    kb.add(types.InlineKeyboardButton("⭐ 24 HOURS — 150", callback_data="pay24"))
-    kb.add(types.InlineKeyboardButton("⭐ 48 HOURS — 300", callback_data="pay48"))
-    kb.add(types.InlineKeyboardButton("⏳ MY ACCESS", callback_data="access"))
-    return kb
-
-
-if bot:
-    @bot.message_handler(commands=["start"])
-    def start(msg):
-        bot.send_message(
-            msg.chat.id,
-            """🃏 Ancient Card Games
-
-🎮 Ancient Poker
-🂡 Emperor's 21
-🃏 Joker Duel
-
-🆓 5 minutes free
-⭐ 1 hour — 50 Stars
-⭐ 24 hours — 150 Stars
-⭐ 48 hours — 300 Stars
-
-Training & entertainment only.
-No real money. No gambling. No withdrawals.""",
-            reply_markup=keyboard()
-        )
-
-
-    @bot.callback_query_handler(func=lambda c: c.data == "trial")
-    def trial(call):
-        user = str(call.from_user.id)
-
-        if user in trial_used:
-            bot.answer_callback_query(call.id, "Trial already used")
-            return
-
-        trial_used.add(user)
-        access_until[user] = int(time.time()) + 300
-
-        bot.answer_callback_query(call.id, "5 minutes activated")
-        bot.send_message(call.message.chat.id, "🆓 Trial unlocked for 5 minutes.", reply_markup=keyboard())
-
-
-    @bot.callback_query_handler(func=lambda c: c.data == "access")
-    def my_access(call):
-        user = str(call.from_user.id)
-        now = int(time.time())
-        until = access_until.get(user, 0)
-
-        if until > now:
-            minutes = (until - now) // 60
-            bot.answer_callback_query(call.id, f"Access active: {minutes} min left")
-            bot.send_message(call.message.chat.id, f"✅ Access active. Time left: {minutes} minutes.")
-        else:
-            bot.answer_callback_query(call.id, "No active access")
-            bot.send_message(call.message.chat.id, "❌ No active access.", reply_markup=keyboard())
-
-
-    @bot.callback_query_handler(func=lambda c: c.data in ["pay1", "pay24", "pay48"])
-    def pay(call):
-        plans = {
-            "pay1": (50, "1h"),
-            "pay24": (150, "24h"),
-            "pay48": (300, "48h")
-        }
-
-        stars, payload = plans[call.data]
-
-        bot.send_invoice(
-            chat_id=call.message.chat.id,
-            title="Ancient Card Games",
-            description="Game access",
-            invoice_payload=payload,
-            currency="XTR",
-            provider_token="",
-            prices=[types.LabeledPrice("Access", stars)]
-        )
-
-        bot.answer_callback_query(call.id)
-
-
-    @bot.pre_checkout_query_handler(func=lambda q: True)
-    def checkout(q):
-        bot.answer_pre_checkout_query(q.id, ok=True)
-
-
-    @bot.message_handler(content_types=["successful_payment"])
-    def paid(msg):
-        payload = msg.successful_payment.invoice_payload
-        now = int(time.time())
-        user = str(msg.from_user.id)
-
-        if payload == "1h":
-            access_until[user] = now + 3600
-        elif payload == "24h":
-            access_until[user] = now + 86400
-        elif payload == "48h":
-            access_until[user] = now + 172800
-
-        bot.send_message(msg.chat.id, "✅ Access activated.", reply_markup=keyboard())
-
-
-@app.route("/webhook", methods=["POST"])
+@app.route(WEBHOOK_PATH, methods=["POST"])
 def webhook():
     if not bot:
         return "BOT_TOKEN missing", 500
 
-    update = types.Update.de_json(request.get_data().decode("utf-8"))
+    json_data = request.get_data().decode("utf-8")
+    update = types.Update.de_json(json_data)
     bot.process_new_updates([update])
     return "OK", 200
 
 
+if bot:
+
+    @bot.message_handler(commands=["start"])
+    def start(message):
+        stats["starts"] += 1
+
+        text = (
+            "🏛 <b>Ancient Card Games</b>\n\n"
+            "Добро пожаловать!\n\n"
+            "🎮 Играй в древние карточные игры.\n"
+            "🎁 Можно получить бесплатный демо-доступ.\n"
+            "⭐ Полный доступ покупается через Telegram Stars."
+        )
+
+        bot.send_message(message.chat.id, text, reply_markup=main_menu())
+
+
+    @bot.callback_query_handler(func=lambda call: True)
+    def callback(call):
+        user_id = str(call.from_user.id)
+        now = int(time.time())
+
+        if call.data == "free_demo":
+            if user_id in free_used:
+                bot.answer_callback_query(call.id, "Вы уже использовали бесплатный доступ.")
+                bot.send_message(
+                    call.message.chat.id,
+                    "⚠️ Бесплатный демо-доступ уже использован.\n\n"
+                    "Можно купить доступ через Telegram Stars.",
+                    reply_markup=main_menu()
+                )
+                return
+
+            free_used.add(user_id)
+            access_until[user_id] = now + 10 * 60
+            stats["free_trials"] += 1
+
+            bot.answer_callback_query(call.id, "Демо-доступ активирован на 10 минут.")
+            bot.send_message(
+                call.message.chat.id,
+                "🎁 Демо-доступ активирован на 10 минут.\n\n"
+                "Нажмите 🎮 Играть.",
+                reply_markup=main_menu()
+            )
+
+        elif call.data == "buy_1h":
+            prices = [types.LabeledPrice(label="1 час доступа", amount=50)]
+
+            bot.send_invoice(
+                chat_id=call.message.chat.id,
+                title="Ancient Card Games — 1 час доступа",
+                description="Доступ к игре на 1 час",
+                invoice_payload="access_1h",
+                provider_token="",
+                currency="XTR",
+                prices=prices,
+                start_parameter="access_1h"
+            )
+
+        elif call.data == "stats":
+            until = access_until.get(user_id, 0)
+            seconds_left = max(0, until - now)
+
+            text = (
+                "📊 <b>Статистика</b>\n\n"
+                f"Запусков бота: {stats['starts']}\n"
+                f"Демо-доступов: {stats['free_trials']}\n"
+                f"Покупок: {stats['payments']}\n\n"
+                f"Ваш доступ активен: {'✅ Да' if seconds_left > 0 else '❌ Нет'}\n"
+                f"Осталось секунд: {seconds_left}"
+            )
+
+            bot.answer_callback_query(call.id)
+            bot.send_message(call.message.chat.id, text, reply_markup=main_menu())
+
+        elif call.data == "info":
+            bot.answer_callback_query(call.id)
+            bot.send_message(
+                call.message.chat.id,
+                "ℹ️ Это развлекательная карточная игра.\n\n"
+                "Нет азартной игры на реальные деньги.\n"
+                "Нет вывода средств.\n"
+                "Нет денежных призов.",
+                reply_markup=main_menu()
+            )
+
+
+    @bot.pre_checkout_query_handler(func=lambda query: True)
+    def pre_checkout(pre_checkout_query):
+        bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
+
+
+    @bot.message_handler(content_types=["successful_payment"])
+    def successful_payment(message):
+        user_id = str(message.from_user.id)
+        now = int(time.time())
+
+        access_until[user_id] = now + 60 * 60
+        stats["payments"] += 1
+
+        bot.send_message(
+            message.chat.id,
+            "✅ Оплата получена.\n\n"
+            "Доступ активирован на 1 час.\n"
+            "Нажмите 🎮 Играть.",
+            reply_markup=main_menu()
+        )
+
+
 def setup_webhook():
     if not bot:
-        print("BOT_TOKEN is missing.")
+        print("BOT_TOKEN is missing")
         return
+
+    webhook_url = APP_URL + WEBHOOK_PATH
 
     bot.remove_webhook()
     time.sleep(1)
-    webhook_url = APP_URL + "/webhook"
     bot.set_webhook(url=webhook_url)
-    print("Webhook set:", webhook_url)
+
+    print(f"Webhook set: {webhook_url}")
 
 
 if __name__ == "__main__":
     setup_webhook()
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 10000)))
+
+    port = int(os.getenv("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
